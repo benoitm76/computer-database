@@ -1,8 +1,11 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <jsp:include page="include/header.jsp" />
 
 <section id="main">
-	<h1 id="homeTitle">456 Computers found</h1>
+	<h1 id="homeTitle">${fn:length(requestScope['list_computers'])}
+		Computers found</h1>
 	<div id="actions">
 		<form action="" method="GET">
 			<input type="search" id="searchbox" name="search" value=""
@@ -17,7 +20,7 @@
 		<thead>
 			<tr>
 				<!-- Variable declarations for passing labels as parameters -->
-				<!-- Table header for Computer Name -->
+				<!-- Table header for Computer Name -->				
 				<th>Computer Name</th>
 				<th>Introduced Date</th>
 				<!-- Table header for Discontinued Date -->
@@ -29,32 +32,15 @@
 		<tbody>
 			<c:forEach var="computer" items="${requestScope['list_computers']}">
 				<tr>
-					<td><a href="#" onclick="">${computer.name}</a></td>
-					<td></td>
-					<td></td>
-					<td>${computer.idCompany}</td>
+					<td><a href="./addComputer?update=${computer.id}" onclick="">${computer.name}</a></td>
+					<td><fmt:formatDate pattern="yyyy-MM-dd"
+							value="${computer.introduced}" /></td>
+					<td><fmt:formatDate pattern="yyyy-MM-dd"
+							value="${computer.discontinued}" /></td>
+					<td>${computer.company.name}</td>
 				</tr>
 
 			</c:forEach>
-
-			<tr>
-				<td><a href="#" onclick="">ThinkPad T420</a></td>
-				<td>2011-01-01</td>
-				<td>2013-03-04</td>
-				<td>Lenovo</td>
-			</tr>
-			<tr>
-				<td><a href="#">Precision 3500</a></td>
-				<td>2010-05-07</td>
-				<td>2012-06-01</td>
-				<td>Dell</td>
-			</tr>
-			<tr>
-				<td><a href="#">Macbook Air</a></td>
-				<td>2005-05-09</td>
-				<td>2008-06-06</td>
-				<td>Apple</td>
-			</tr>
 		</tbody>
 	</table>
 </section>

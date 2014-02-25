@@ -7,21 +7,21 @@ public class Computer {
 	private String name;
 	private Date introduced;
 	private Date discontinued;
-	
-	private long idCompany;
+
+	private Company company;
 
 	public Computer() {
 
 	}
 
-	public Computer(long id, String name, Date introduced, Date discontinued,
-			long idCompany) {
+	public Computer(long id, String name, Date introduced,
+			Date discontinued, Company company) {
 
 		this.id = id;
 		this.name = name;
 		this.introduced = introduced;
 		this.discontinued = discontinued;
-		this.idCompany = idCompany;
+		this.company = company;
 	}
 
 	public long getId() {
@@ -56,19 +56,19 @@ public class Computer {
 		this.discontinued = discontinued;
 	}
 
-	public long getIdCompany() {
-		return idCompany;
+	public Company getCompany() {
+		return company;
 	}
 
-	public void setIdCompany(long idCompany) {
-		this.idCompany = idCompany;
+	public void setIdCompany(Company company) {
+		this.company = company;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Computer [id=" + id + ", name=" + name + ", introduced="
-				+ introduced + ", discontinued=" + discontinued
-				+ ", id_company=" + idCompany + "]";
+				+ introduced + ", discontinued=" + discontinued + ", company="
+				+ company + "]";
 	}
 
 }

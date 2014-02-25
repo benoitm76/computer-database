@@ -64,7 +64,8 @@ public class DaoCompany {
 		try {
 			con = DBConnection.getConnection();
 			statement = con.createStatement();
-			rs = statement.executeQuery("SELECT id, name FROM company");
+			rs = statement
+					.executeQuery("SELECT id, name FROM company ORDER BY name");
 			companies = new ArrayList<>();
 			while (rs.next()) {
 				companies.add(new Company(rs.getLong(1), rs.getString(2)));

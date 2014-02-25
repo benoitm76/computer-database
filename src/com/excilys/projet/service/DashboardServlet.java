@@ -11,6 +11,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.projet.dao.DaoComputer;
 
 /**
@@ -19,6 +22,7 @@ import com.excilys.projet.dao.DaoComputer;
 @WebServlet({ "/dashboard" })
 public class DashboardServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	final Logger logger = LoggerFactory.getLogger(DashboardServlet.class);
 
     /**
      * Default constructor. 
@@ -36,10 +40,8 @@ public class DashboardServlet extends HttpServlet {
 		try {
 			request.setAttribute("list_computers", DaoComputer.getInstance().getAllComputer());
 		} catch (NamingException | SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Erreur lors de l'accès à la liste", e);
 		}
-		
 		rd.forward(request, response);
 		
 	}
@@ -48,7 +50,7 @@ public class DashboardServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		doGet(request, response);
 	}
 
 }
