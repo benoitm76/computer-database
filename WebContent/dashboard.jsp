@@ -1,10 +1,12 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ page import="com.excilys.projet.model.ComputerOrder"%>
+<%@ taglib uri="pagination" prefix="page" %>
 <jsp:include page="include/header.jsp" />
 
 <section id="main">
-	<h1 id="homeTitle">${fn:length(requestScope['list_computers'])}
+	<h1 id="homeTitle">${requestScope['number_of_result']}
 		Computers found</h1>
 	<div id="actions">
 		<form action="" method="GET">
@@ -15,18 +17,24 @@
 		<a class="btn success" id="add" href="addComputer.jsp">Add
 			Computer</a>
 	</div>
-
 	<table class="computers zebra-striped">
 		<thead>
 			<tr>
 				<!-- Variable declarations for passing labels as parameters -->
 				<!-- Table header for Computer Name -->
-				<th>Computer Name</th>
-				<th>Introduced Date</th>
+				<th><a
+					href="./dashboard?orderByName=${ requestScope['order'] == 'ORDER_BY_NAME_ASC' ? 'desc' : 'asc'}">Computer
+						Name</a></th>
+				<th><a
+					href="./dashboard?orderByIntroducedDate=${ requestScope['order'] == 'ORDER_BY_INTRODUCED_DATE_ASC' ? 'desc' : 'asc'}">Introduced
+						Date</a></th>
 				<!-- Table header for Discontinued Date -->
-				<th>Discontinued Date</th>
+				<th><a
+					href="./dashboard?orderByDiscontinuedDate=${ requestScope['order'] == 'ORDER_BY_DISCONTINUED_DATE_ASC' ? 'desc' : 'asc'}">Discontinued
+						Date</a></th>
 				<!-- Table header for Company -->
-				<th>Company</th>
+				<th><a
+					href="./dashboard?orderByCompanyName=${ requestScope['order'] == 'ORDER_BY_COMPANY_NAME_ASC' ? 'desc' : 'asc'}">Company</a></th>
 				<th></th>
 			</tr>
 		</thead>
@@ -40,9 +48,10 @@
 							value="${computer.discontinued}" /></td>
 					<td>${computer.company.name}</td>
 					<td>
-						<form action="./addComputer" method="post">
-							<input type="hidden" value="${computer.id}" />
-							<input type="submit" class="btn danger" value="Delete" />
+						<form style="margin-bottom: 0px;" action="./dashboard"
+							method="POST">
+							<input type="hidden" name="id" value="${computer.id}" /> <input
+								type="submit" class="btn danger" value="Delete" />
 						</form>
 					</td>
 				</tr>
@@ -50,6 +59,7 @@
 			</c:forEach>
 		</tbody>
 	</table>
+	<page:pagination lastPage="${requestScope['last_page']}" currentPage="${requestScope['current_page']}" queryParameters="${requestScope['query_parameters']}"/>
 </section>
 
 <jsp:include page="include/footer.jsp" />
