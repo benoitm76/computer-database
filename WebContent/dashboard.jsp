@@ -20,13 +20,14 @@
 		<thead>
 			<tr>
 				<!-- Variable declarations for passing labels as parameters -->
-				<!-- Table header for Computer Name -->				
+				<!-- Table header for Computer Name -->
 				<th>Computer Name</th>
 				<th>Introduced Date</th>
 				<!-- Table header for Discontinued Date -->
 				<th>Discontinued Date</th>
 				<!-- Table header for Company -->
 				<th>Company</th>
+				<th></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -38,6 +39,12 @@
 					<td><fmt:formatDate pattern="yyyy-MM-dd"
 							value="${computer.discontinued}" /></td>
 					<td>${computer.company.name}</td>
+					<td>
+						<form action="./addComputer" method="post">
+							<input type="hidden" value="${computer.id}" />
+							<input type="submit" class="btn danger" value="Delete" />
+						</form>
+					</td>
 				</tr>
 
 			</c:forEach>

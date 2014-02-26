@@ -50,6 +50,7 @@ public class AddComputerServlet extends HttpServlet {
 			try {
 				Computer c = DaoComputer.getInstance().getComputer(
 						Long.parseLong(request.getParameter("update")));
+				request.setAttribute("computer", c);
 			} catch (NamingException | SQLException | NumberFormatException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -75,6 +76,19 @@ public class AddComputerServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		boolean error = false;
+		boolean isUpdate = false;
+		Computer computer = null;
+		if (request.getParameter("update") != null) {
+			try {
+				computer = DaoComputer.getInstance().getComputer(
+						Long.parseLong(request.getParameter("update")));
+				// request.setAttribute("computer", c);
+				isUpdate = true;
+			} catch (NamingException | SQLException | NumberFormatException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		if (request.getParameter("name") == null
 				|| request.getParameter("name").equals("")) {
 			error = true;
@@ -112,8 +126,8 @@ public class AddComputerServlet extends HttpServlet {
 			error = true;
 			logger.error("Discontinued date null");
 		}
+
 		Company c = null;
-		System.out.println(request.getParameter("company"));
 		if (request.getParameter("company") == null) {
 			error = true;
 		} else if (!request.getParameter("company").equals("0")) {
@@ -133,13 +147,30 @@ public class AddComputerServlet extends HttpServlet {
 		}
 
 		if (!error) {
-			try {
-				DaoComputer.getInstance().addComputer(
-						new Computer(0, (String) request.getParameter("name"),
-								introducedDate, discontinuedDate, c));
-			} catch (SQLException | NamingException e) {
-				error = true;
-				logger.error("Erreur lors de l'insertion de l'ordinateur", e);
+			if (isUpdate) {
+				try {
+					computer.setName((String) request
+							.getParameter("name"));
+					computer.setIntroduced(introducedDate);
+					computer.setDiscontinued(discontinuedDate);
+					computer.setCompany(c);
+					DaoComputer.getInstance().updateComputer(computer);
+				} catch (SQLException | NamingException e) {
+					error = true;
+					logger.error("Erreur lors de l'insertion de l'ordinateur",
+							e);
+				}
+			} else {
+				try {
+					DaoComputer.getInstance().addComputer(
+							new Computer(0, (String) request
+									.getParameter("name"), introducedDate,
+									discontinuedDate, c));
+				} catch (SQLException | NamingException e) {
+					error = true;
+					logger.error("Erreur lors de l'insertion de l'ordinateur",
+							e);
+				}
 			}
 		}
 		request.setAttribute("error", error);

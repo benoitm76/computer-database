@@ -37,7 +37,7 @@ public class DaoComputer {
 			}
 			Date discontinuedDate = null;
 			if (c.getDiscontinued() != null) {
-				introducedDate = new Date(c.getDiscontinued().getTime());
+				discontinuedDate = new Date(c.getDiscontinued().getTime());
 			}
 
 			statement.setString(1, c.getName());
@@ -74,7 +74,7 @@ public class DaoComputer {
 			con = DBConnection.getConnection();
 			statement = con
 					.prepareStatement("SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, company.name "
-							+ "FROM computer c LEFT JOIN company ON c.company_id = company.id WHERE id = ?");
+							+ "FROM computer c LEFT JOIN company ON c.company_id = company.id WHERE c.id = ?");
 
 			statement.setLong(1, id);
 			rs = statement.executeQuery();
@@ -135,6 +135,48 @@ public class DaoComputer {
 
 		}
 		return computers;
+	}
+
+	public void updateComputer(Computer c) throws SQLException, NamingException {
+		Connection con = null;
+		PreparedStatement statement = null;
+
+		try {
+			con = DBConnection.getConnection();
+
+			statement = con
+					.prepareStatement("UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?");
+
+			Date introducedDate = null;
+			if (c.getIntroduced() != null) {
+				introducedDate = new Date(c.getIntroduced().getTime());
+			}
+			Date discontinuedDate = null;
+			if (c.getDiscontinued() != null) {
+				discontinuedDate = new Date(c.getDiscontinued().getTime());
+			}
+
+			statement.setString(1, c.getName());
+			statement.setDate(2, introducedDate);
+			statement.setDate(3, discontinuedDate);
+			if (c.getCompany() == null) {
+				statement.setNull(4, Types.BIGINT);
+			} else {
+				statement.setLong(4, c.getCompany().getId());
+			}
+			statement.setLong(5, c.getId());
+
+			statement.executeUpdate();
+
+		} finally {
+			if (con != null) {
+				con.close();
+			}
+			if (statement != null) {
+				statement.close();
+			}
+
+		}
 	}
 
 	public static DaoComputer getInstance() {
