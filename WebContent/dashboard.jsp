@@ -44,7 +44,7 @@
 				<!-- Table header for Company -->
 				<th><a
 					href="./dashboard?orderByCompanyName=${ requestScope['order'] == 'ORDER_BY_COMPANY_NAME_ASC' ? 'desc' : 'asc'}${!empty param.search ? '&search='.concat(param.search) : ''}">Company</a>&nbsp;${ requestScope['order'] == 'ORDER_BY_COMPANY_NAME_ASC' ? 'ASC' : ''}${ requestScope['order'] == 'ORDER_BY_COMPANY_NAME_DESC' ? 'DESC' : ''}</th>
-				<th></th>
+				<th>Delete</th>
 			</tr>
 		</thead>
 		<tbody>
