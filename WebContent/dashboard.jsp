@@ -2,15 +2,15 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ page import="com.excilys.projet.model.ComputerOrder"%>
-<%@ taglib uri="pagination" prefix="page" %>
+<%@ taglib uri="pagination" prefix="page"%>
 <jsp:include page="include/header.jsp" />
 
 <section id="main">
-	<h1 id="homeTitle">${requestScope['number_of_result']}
-		Computers found</h1>
+	<h1 id="homeTitle">${requestScope['number_of_result']} Computers
+		found</h1>
 	<div id="actions">
 		<form action="" method="GET">
-			<input type="search" id="searchbox" name="search" value=""
+			<input type="search" id="searchbox" name="search" value="${!empty param.search ? param.search : ''}"
 				placeholder="Search name"> <input type="submit"
 				id="searchsubmit" value="Filter by name" class="btn primary">
 		</form>
@@ -23,18 +23,18 @@
 				<!-- Variable declarations for passing labels as parameters -->
 				<!-- Table header for Computer Name -->
 				<th><a
-					href="./dashboard?orderByName=${ requestScope['order'] == 'ORDER_BY_NAME_ASC' ? 'desc' : 'asc'}">Computer
+					href="./dashboard?orderByName=${ requestScope['order'] == 'ORDER_BY_NAME_ASC' ? 'desc' : 'asc'}${!empty param.search ? '&search='.concat(param.search) : ''}">Computer
 						Name</a></th>
 				<th><a
-					href="./dashboard?orderByIntroducedDate=${ requestScope['order'] == 'ORDER_BY_INTRODUCED_DATE_ASC' ? 'desc' : 'asc'}">Introduced
+					href="./dashboard?orderByIntroducedDate=${ requestScope['order'] == 'ORDER_BY_INTRODUCED_DATE_ASC' ? 'desc' : 'asc'}${!empty param.search ? '&search='.concat(param.search) : ''}">Introduced
 						Date</a></th>
 				<!-- Table header for Discontinued Date -->
 				<th><a
-					href="./dashboard?orderByDiscontinuedDate=${ requestScope['order'] == 'ORDER_BY_DISCONTINUED_DATE_ASC' ? 'desc' : 'asc'}">Discontinued
+					href="./dashboard?orderByDiscontinuedDate=${ requestScope['order'] == 'ORDER_BY_DISCONTINUED_DATE_ASC' ? 'desc' : 'asc'}${!empty param.search ? '&search='.concat(param.search) : ''}">Discontinued
 						Date</a></th>
 				<!-- Table header for Company -->
 				<th><a
-					href="./dashboard?orderByCompanyName=${ requestScope['order'] == 'ORDER_BY_COMPANY_NAME_ASC' ? 'desc' : 'asc'}">Company</a></th>
+					href="./dashboard?orderByCompanyName=${ requestScope['order'] == 'ORDER_BY_COMPANY_NAME_ASC' ? 'desc' : 'asc'}${!empty param.search ? '&search='.concat(param.search) : ''}">Company</a></th>
 				<th></th>
 			</tr>
 		</thead>
@@ -59,7 +59,9 @@
 			</c:forEach>
 		</tbody>
 	</table>
-	<page:pagination lastPage="${requestScope['last_page']}" currentPage="${requestScope['current_page']}" queryParameters="${requestScope['query_parameters']}"/>
+	<page:pagination lastPage="${requestScope['last_page']}"
+		currentPage="${requestScope['current_page']}"
+		queryParameters="${requestScope['query_parameters']}" />
 </section>
 
 <jsp:include page="include/footer.jsp" />

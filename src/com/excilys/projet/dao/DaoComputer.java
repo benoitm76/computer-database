@@ -111,8 +111,8 @@ public class DaoComputer {
 
 		try {
 			con = DBConnection.getConnection();
-			String sql = "SELECT c.id, c.name, c.introduced, c.discontinued, c.company_id, company.name "
-					+ "FROM computer c LEFT JOIN company ON c.company_id = company.id WHERE c.name LIKE ?";
+			String sql = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.name "
+					+ "FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.name LIKE ? OR company.name LIKE ?";
 			if (order != null) {
 				sql += " ORDER BY " + order.getOrderStatement();
 			}
@@ -120,6 +120,7 @@ public class DaoComputer {
 
 			statement = con.prepareStatement(sql);
 			statement.setString(1, "%" + search + "%");
+			statement.setString(2, "%" + search + "%");
 			rs = statement.executeQuery();
 			computers = new ArrayList<>();
 			while (rs.next()) {
