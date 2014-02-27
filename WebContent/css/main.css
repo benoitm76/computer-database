@@ -71,3 +71,7 @@ table.computers .header a {
 .col5 {
 	width: 30%;
 }
+
+.delete_form {
+	margin-bottom: 0;
+}

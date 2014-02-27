@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.naming.NamingException;
 import javax.servlet.RequestDispatcher;
@@ -77,6 +79,7 @@ public class AddComputerServlet extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		boolean error = false;
 		boolean isUpdate = false;
+		List<String> message = new ArrayList<>();
 		Computer computer = null;
 		if (request.getParameter("update") != null) {
 			try {
@@ -92,6 +95,7 @@ public class AddComputerServlet extends HttpServlet {
 		if (request.getParameter("name") == null
 				|| request.getParameter("name").equals("")) {
 			error = true;
+			message.add("Name invalid");
 			logger.error("Name invalid");
 		}
 
@@ -106,12 +110,14 @@ public class AddComputerServlet extends HttpServlet {
 						"introducedDate").toString());
 			} catch (ParseException e) {
 				error = true;
-				logger.error("Introduce date invalid", e);
+				message.add("Introduced date invalid");
+				logger.error("Introduced date invalid", e);
 			}
-		} else if (request.getParameter("introducedDate") == null) {
+		} /*else if (request.getParameter("introducedDate") == null) {
 			error = true;
-			logger.error("Introduce date null");
-		}
+			errorMessage.add("Introduced date null");
+			logger.error("Introduced date null");
+		}*/
 
 		if (request.getParameter("discontinuedDate") != null
 				&& !request.getParameter("discontinuedDate").equals("")) {
@@ -120,17 +126,19 @@ public class AddComputerServlet extends HttpServlet {
 						"discontinuedDate").toString());
 			} catch (ParseException e) {
 				error = true;
+				message.add("Discontinued date invalid");
 				logger.error("Discontinued date invalid", e);
 			}
-		} else if (request.getParameter("discontinuedDate") == null) {
+		} /*else if (request.getParameter("discontinuedDate") == null) {
 			error = true;
+			errorMessage.add("Discontinued date null");
 			logger.error("Discontinued date null");
-		}
+		}*/
 
 		Company c = null;
-		if (request.getParameter("company") == null) {
+		/*if (request.getParameter("company") == null) {
 			error = true;
-		} else if (!request.getParameter("company").equals("0")) {
+		} else*/ if (!request.getParameter("company").equals("0")) {
 			try {
 				c = DaoCompany.getInstance().getCompany(
 						Long.parseLong(request.getParameter("company")
@@ -138,10 +146,12 @@ public class AddComputerServlet extends HttpServlet {
 			} catch (NamingException | SQLException | NumberFormatException e) {
 				// TODO Auto-generated catch block
 				error = true;
-				logger.error("Erreur lors de la récupération de la company", e);
+				message.add("Error when get company");
+				logger.error("Error when get company", e);
 			}
 			if (c == null) {
 				error = true;
+				message.add("Company not found");
 				logger.error("Company non trouvé");
 			}
 		}
@@ -155,9 +165,11 @@ public class AddComputerServlet extends HttpServlet {
 					computer.setDiscontinued(discontinuedDate);
 					computer.setCompany(c);
 					DaoComputer.getInstance().updateComputer(computer);
+					message.add("Computer updated");
 				} catch (SQLException | NamingException e) {
 					error = true;
-					logger.error("Erreur lors de l'insertion de l'ordinateur",
+					message.add("Error when update computer");
+					logger.error("Error when update computer",
 							e);
 				}
 			} else {
@@ -166,14 +178,17 @@ public class AddComputerServlet extends HttpServlet {
 							new Computer(0, (String) request
 									.getParameter("name"), introducedDate,
 									discontinuedDate, c));
+					message.add("Computer inserted");
 				} catch (SQLException | NamingException e) {
 					error = true;
-					logger.error("Erreur lors de l'insertion de l'ordinateur",
+					message.add("Error when insert new computer");
+					logger.error("Error when insert new computer",
 							e);
 				}
 			}
 		}
 		request.setAttribute("error", error);
+		request.setAttribute("message", message);
 		doGet(request, response);
 	}
 }

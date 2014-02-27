@@ -6,16 +6,25 @@
 <jsp:include page="include/header.jsp" />
 
 <section id="main">
-	<h1 id="homeTitle">${requestScope['number_of_result']} Computers
+	<h1 id="homeTitle">${requestScope['number_of_result']}&nbsp;Computers
 		found</h1>
+	<c:if
+		test="${!empty requestScope['message'] && fn:length(requestScope['message']) != 0}">
+		<div
+			class="alert-message ${ requestScope['error'] ? 'error' : 'success'}">
+			<c:forEach var="message" items="${requestScope['message']}">
+				<p>${message}</p>
+			</c:forEach>
+		</div>
+	</c:if>
 	<div id="actions">
 		<form action="" method="GET">
-			<input type="search" id="searchbox" name="search" value="${!empty param.search ? param.search : ''}"
+			<input type="search" id="searchbox" name="search"
+				value="${!empty param.search ? param.search : ''}"
 				placeholder="Search name"> <input type="submit"
 				id="searchsubmit" value="Filter by name" class="btn primary">
 		</form>
-		<a class="btn success" id="add" href="addComputer.jsp">Add
-			Computer</a>
+		<a class="btn success" id="add" href="addComputer">Add Computer</a>
 	</div>
 	<table class="computers zebra-striped">
 		<thead>
@@ -24,17 +33,17 @@
 				<!-- Table header for Computer Name -->
 				<th><a
 					href="./dashboard?orderByName=${ requestScope['order'] == 'ORDER_BY_NAME_ASC' ? 'desc' : 'asc'}${!empty param.search ? '&search='.concat(param.search) : ''}">Computer
-						Name</a></th>
+						Name</a>&nbsp;${ requestScope['order'] == 'ORDER_BY_NAME_ASC' ? 'ASC' : ''}${ requestScope['order'] == 'ORDER_BY_NAME_DESC' ? 'DESC' : ''}</th>
 				<th><a
 					href="./dashboard?orderByIntroducedDate=${ requestScope['order'] == 'ORDER_BY_INTRODUCED_DATE_ASC' ? 'desc' : 'asc'}${!empty param.search ? '&search='.concat(param.search) : ''}">Introduced
-						Date</a></th>
+						Date</a>&nbsp;${ requestScope['order'] == 'ORDER_BY_INTRODUCED_DATE_ASC' ? 'ASC' : ''}${ requestScope['order'] == 'ORDER_BY_INTRODUCED_DATE_DESC' ? 'DESC' : ''}</th>
 				<!-- Table header for Discontinued Date -->
 				<th><a
 					href="./dashboard?orderByDiscontinuedDate=${ requestScope['order'] == 'ORDER_BY_DISCONTINUED_DATE_ASC' ? 'desc' : 'asc'}${!empty param.search ? '&search='.concat(param.search) : ''}">Discontinued
-						Date</a></th>
+						Date</a>&nbsp;${ requestScope['order'] == 'ORDER_BY_DISCONTINUED_DATE_ASC' ? 'ASC' : ''}${ requestScope['order'] == 'ORDER_BY_DISCONTINUED_DATE_DESC' ? 'DESC' : ''}</th>
 				<!-- Table header for Company -->
 				<th><a
-					href="./dashboard?orderByCompanyName=${ requestScope['order'] == 'ORDER_BY_COMPANY_NAME_ASC' ? 'desc' : 'asc'}${!empty param.search ? '&search='.concat(param.search) : ''}">Company</a></th>
+					href="./dashboard?orderByCompanyName=${ requestScope['order'] == 'ORDER_BY_COMPANY_NAME_ASC' ? 'desc' : 'asc'}${!empty param.search ? '&search='.concat(param.search) : ''}">Company</a>&nbsp;${ requestScope['order'] == 'ORDER_BY_COMPANY_NAME_ASC' ? 'ASC' : ''}${ requestScope['order'] == 'ORDER_BY_COMPANY_NAME_DESC' ? 'DESC' : ''}</th>
 				<th></th>
 			</tr>
 		</thead>
@@ -48,8 +57,7 @@
 							value="${computer.discontinued}" /></td>
 					<td>${computer.company.name}</td>
 					<td>
-						<form style="margin-bottom: 0px;" action="./dashboard"
-							method="POST">
+						<form class="delete_form" action="./dashboard" method="POST">
 							<input type="hidden" name="id" value="${computer.id}" /> <input
 								type="submit" class="btn danger" value="Delete" />
 						</form>

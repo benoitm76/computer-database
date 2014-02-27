@@ -52,25 +52,25 @@ public class PaginationTag extends TagSupport {
 						+ "'>" + (currentPage - 1) + "</a>");
 			}
 			out.print(" " + currentPage);
-			if (currentPage + 1 < lastPage) {
+			if (currentPage + 1 <= lastPage) {
 				out.print(" <a href='" + url + "page=" + (currentPage + 1)
 						+ "'>" + (currentPage + 1) + "</a>");
 			}
-			if (currentPage + 2 < lastPage) {
+			if (currentPage + 2 <= lastPage) {
 				out.print(" <a href='" + url + "page=" + (currentPage + 2)
 						+ "'>" + (currentPage + 2) + "</a>");
 			}
 
-			if (currentPage + 4 < lastPage) {
+			if (currentPage + 4 <= lastPage) {
 				out.print(" ...");
 			}
-			if (currentPage + 3 < lastPage) {
+			if (currentPage + 3 <= lastPage) {
 
 				out.print(" <a href='" + url + "page=" + lastPage + "'>"
 						+ lastPage + "</a>");
 
 			}
-			if (currentPage + 4 < lastPage) {
+			if (currentPage + 4 <= lastPage) {
 				out.print(" <a href='" + url + "page=" + (currentPage + 4)
 						+ "'>>></a>");
 			}

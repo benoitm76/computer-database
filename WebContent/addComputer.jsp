@@ -1,13 +1,19 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <jsp:include page="include/header.jsp" />
 <section id="main">
 	<c:set var="computer" value="${requestScope['computer']}" />
-	<h1>${!empty computer ? 'Update' : 'Add'} Computer</h1>
-	<c:if test="${requestScope['error']}">
-		Une erreur c'est produite !
+	<h1>${!empty computer ? 'Update' : 'Add'}Computer</h1>
+	<c:if test="${!empty requestScope['message'] && fn:length(requestScope['message']) != 0}">
+		<div
+			class="alert-message ${ requestScope['error'] ? 'error' : 'success'}">
+			<c:forEach var="message" items="${requestScope['message']}">
+				<p>${message}</p>
+			</c:forEach>
+		</div>
 	</c:if>
-	
+
 	<form
 		action="./addComputer${!empty computer ? '?update='.concat(computer.id) : ''}"
 		method="POST">
@@ -52,8 +58,8 @@
 			</div>
 		</fieldset>
 		<div class="actions">
-			<input type="submit" value="${!empty computer ? 'Update' : 'Add'}" class="btn primary"> or <a
-				href="dashboard" class="btn">Cancel</a>
+			<input type="submit" value="${!empty computer ? 'Update' : 'Add'}"
+				class="btn primary"> or <a href="dashboard" class="btn">Cancel</a>
 		</div>
 	</form>
 </section>

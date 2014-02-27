@@ -54,9 +54,8 @@ public class DashboardServlet extends HttpServlet {
 		}
 
 		ComputerOrder order = getOrder(request);
-		List<String> queryParameters = new  ArrayList<>();
-		if(order != null)
-		{
+		List<String> queryParameters = new ArrayList<>();
+		if (order != null) {
 			queryParameters.add(order.getUrlParameter());
 		}
 		try {
@@ -65,7 +64,7 @@ public class DashboardServlet extends HttpServlet {
 				numberOfResult = DaoComputer.getInstance().getComputerCount(
 						null);
 				numberOfPage = (numberOfResult / 10) + 1;
-				if (page < 1 && page > numberOfPage) {
+				if (page < 1 || page > numberOfPage) {
 					page = 1;
 				}
 				request.setAttribute(
@@ -77,7 +76,7 @@ public class DashboardServlet extends HttpServlet {
 						request.getParameter("search"));
 				numberOfPage = (numberOfResult / 10) + 1;
 				queryParameters.add("search=" + request.getParameter("search"));
-				if (page < 1 && page > numberOfPage) {
+				if (page < 1 || page > numberOfPage) {
 					page = 1;
 				}
 				request.setAttribute(
@@ -103,13 +102,17 @@ public class DashboardServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		List<String> message = new ArrayList<>();
 		if (request.getParameter("id") != null) {
 			try {
 				DaoComputer.getInstance().deleteComputer(
 						Long.parseLong(request.getParameter("id")));
+				message.add("Computer deleted");
 			} catch (NumberFormatException | SQLException | NamingException e) {
-				logger.error("Erreur lors de la suppresion", e);
+				logger.error("Error when delete computer", e);
+				message.add("Error when delete computer");
 			}
+			request.setAttribute("message", message);
 		}
 
 		doGet(request, response);
