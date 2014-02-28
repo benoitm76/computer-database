@@ -3,16 +3,20 @@ package com.excilys.projet.dao;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.jolbox.bonecp.BoneCP;
 import com.jolbox.bonecp.BoneCPConfig;
 
 public class DBConnection {
 
 	private static BoneCP connectionPool;
+	private final static Logger logger = LoggerFactory.getLogger(DBConnection.class);
 
 	public static void initialize() throws SQLException {
 		try {
-			Class.forName("org.hsqldb.jdbcDriver");
+			Class.forName("com.mysql.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -35,6 +39,7 @@ public class DBConnection {
 
 		if (connectionPool == null) {
 			initialize();
+			logger.debug("Initialization connection");
 		}
 
 		return connectionPool.getConnection();
