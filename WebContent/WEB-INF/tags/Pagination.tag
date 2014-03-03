@@ -6,8 +6,6 @@
 <%@ attribute name="queryParameters" required="true"
 	type="java.util.Map" rtexprvalue="true"%>
 
-
-
 <c:url value="./dashboard" var="variableURL">
 	<c:forEach items="${queryParameters}" var="entry">
 		<c:param name="${entry.key}" value="${entry.value}" />
