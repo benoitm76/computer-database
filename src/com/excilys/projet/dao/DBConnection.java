@@ -12,7 +12,10 @@ import com.jolbox.bonecp.BoneCPConfig;
 public class DBConnection {
 
 	private static BoneCP connectionPool;
-	private final static Logger logger = LoggerFactory.getLogger(DBConnection.class);
+	private final static Logger logger = LoggerFactory
+			.getLogger(DBConnection.class);
+
+	private static ThreadLocal<Connection> currentCon = new ThreadLocal<>();
 
 	public static void initialize() throws SQLException {
 		try {
@@ -29,19 +32,32 @@ public class DBConnection {
 
 	}
 
-	public static Connection getConnection() throws
-			SQLException {
+	public static Connection getConnection() throws SQLException {
 		/*
 		 * Context initContext = new InitialContext(); Context envContext =
 		 * (Context) initContext.lookup("java:/comp/env"); DataSource ds =
 		 * (DataSource) envContext.lookup("db_connection");
 		 */
 
+		return currentCon.get();
+	}
+
+	public static void openConnection() throws SQLException {
 		if (connectionPool == null) {
 			initialize();
 			logger.debug("Initialization connection");
 		}
+		if (currentCon != null && currentCon.get() != null && !currentCon.get().isClosed()) {
+			currentCon.get().close();
+		}
+		currentCon.set(connectionPool.getConnection());
+	}
 
-		return connectionPool.getConnection();
+	public static void closeConnection() throws SQLException {
+
+		if (currentCon != null && currentCon.get() != null
+				&& !currentCon.get().isClosed()) {
+			currentCon.get().close();
+		}
 	}
 }

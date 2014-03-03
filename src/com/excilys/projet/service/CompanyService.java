@@ -3,6 +3,7 @@ package com.excilys.projet.service;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.excilys.projet.dao.DBConnection;
 import com.excilys.projet.dao.DaoFactory;
 import com.excilys.projet.model.Company;
 
@@ -14,23 +15,52 @@ public class CompanyService {
 	}
 
 	public Company find(long id) throws SQLException {
-		return DaoFactory.getDaoCompany().find(id);
+		Company company = null;
+		try {
+			DBConnection.openConnection();
+			company = DaoFactory.getDaoCompany().find(id);
+		} finally {
+			DBConnection.closeConnection();
+		}
+		return company;
 	}
 
 	public List<Company> findAll() throws SQLException {
-		return DaoFactory.getDaoCompany().findAll();
+		List<Company> companies = null;
+		try {
+			DBConnection.openConnection();
+			companies = DaoFactory.getDaoCompany().findAll();
+		} finally {
+			DBConnection.closeConnection();
+		}
+		return companies;
 	}
 
 	public void create(Company c) throws SQLException {
-		DaoFactory.getDaoCompany().create(c);
+		try {
+			DBConnection.openConnection();
+			DaoFactory.getDaoCompany().create(c);
+		} finally {
+			DBConnection.closeConnection();
+		}
 	}
 
 	public void update(Company c) throws SQLException {
-		DaoFactory.getDaoCompany().update(c);
+		try {
+			DBConnection.openConnection();
+			DaoFactory.getDaoCompany().update(c);
+		} finally {
+			DBConnection.closeConnection();
+		}
 	}
 
 	public void delete(long id) throws SQLException {
-		DaoFactory.getDaoCompany().delete(id);
+		try {
+			DBConnection.openConnection();
+			DaoFactory.getDaoCompany().delete(id);
+		} finally {
+			DBConnection.closeConnection();
+		}
 	}
 
 	public static CompanyService getInstance() {

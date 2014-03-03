@@ -38,9 +38,6 @@ public class DaoCompany extends Dao<Company> {
 			}
 		} finally {
 			try {
-				if (con != null) {
-					con.close();
-				}
 				if (statement != null) {
 					statement.close();
 				}
@@ -74,9 +71,6 @@ public class DaoCompany extends Dao<Company> {
 
 		} finally {
 			try {
-				if (con != null) {
-					con.close();
-				}
 				if (statement != null) {
 					statement.close();
 				}
