@@ -1,14 +1,14 @@
 package com.excilys.projet.model;
 
 public enum ComputerOrder {
-	ORDER_BY_NAME_ASC("computer.name ASC", "orderByName=asc"), ORDER_BY_NAME_DESC(
-			"computer.name DESC", "orderByName=desc"), ORDER_BY_INTRODUCED_DATE_ASC(
-			"computer.introduced ASC", "orderByIntroducedDate=asc"), ORDER_BY_INTRODUCED_DATE_DESC(
-			"computer.introduced DESC", "orderByIntroducedDate=desc"), ORDER_BY_DISCONTINUED_DATE_ASC(
-			"computer.discontinued ASC", "orderByDiscontinuedDate=asc"), ORDER_BY_DISCONTINUED_DATE_DESC(
-			"computer.discontinued DESC", "orderByDiscontinuedDate=desc"), ORDER_BY_COMPANY_NAME_ASC(
-			"company.name ASC", "orderByCompanyName=asc"), ORDER_BY_COMPANY_NAME_DESC(
-			"company.name DESC", "orderByCompanyName=desc");
+	ORDER_BY_NAME_ASC("computer.name ASC", "orderByNameAsc"), ORDER_BY_NAME_DESC(
+			"computer.name DESC", "orderByNameDesc"), ORDER_BY_INTRODUCED_DATE_ASC(
+			"computer.introduced ASC", "orderByIntroducedDateAsc"), ORDER_BY_INTRODUCED_DATE_DESC(
+			"computer.introduced DESC", "orderByIntroducedDateDesc"), ORDER_BY_DISCONTINUED_DATE_ASC(
+			"computer.discontinued ASC", "orderByDiscontinuedDateAsc"), ORDER_BY_DISCONTINUED_DATE_DESC(
+			"computer.discontinued DESC", "orderByDiscontinuedDateDesc"), ORDER_BY_COMPANY_NAME_ASC(
+			"company.name ASC", "orderByCompanyNameAsc"), ORDER_BY_COMPANY_NAME_DESC(
+			"company.name DESC", "orderByCompanyNameDesc");
 
 	private final String orderStatement;
 	private final String urlParameter;

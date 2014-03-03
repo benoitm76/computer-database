@@ -32,18 +32,18 @@
 				<!-- Variable declarations for passing labels as parameters -->
 				<!-- Table header for Computer Name -->
 				<th><a
-					href="./dashboard?orderByName=${ requestScope['order'] == 'ORDER_BY_NAME_ASC' ? 'desc' : 'asc'}${!empty param.search ? '&search='.concat(param.search) : ''}">Computer
+					href="./dashboard?order=${ requestScope['order'] == 'ORDER_BY_NAME_ASC' ? 'orderByNameDesc' : 'orderByNameAsc'}${!empty param.search ? '&search='.concat(param.search) : ''}">Computer
 						Name</a>&nbsp;${ requestScope['order'] == 'ORDER_BY_NAME_ASC' ? 'ASC' : ''}${ requestScope['order'] == 'ORDER_BY_NAME_DESC' ? 'DESC' : ''}</th>
 				<th><a
-					href="./dashboard?orderByIntroducedDate=${ requestScope['order'] == 'ORDER_BY_INTRODUCED_DATE_ASC' ? 'desc' : 'asc'}${!empty param.search ? '&search='.concat(param.search) : ''}">Introduced
+					href="./dashboard?orderByIntroducedDate=${ requestScope['order'] == 'ORDER_BY_INTRODUCED_DATE_ASC' ? 'orderByIntroducedDateDesc' : 'orderByIntroducedDateAsc'}${!empty param.search ? '&search='.concat(param.search) : ''}">Introduced
 						Date</a>&nbsp;${ requestScope['order'] == 'ORDER_BY_INTRODUCED_DATE_ASC' ? 'ASC' : ''}${ requestScope['order'] == 'ORDER_BY_INTRODUCED_DATE_DESC' ? 'DESC' : ''}</th>
 				<!-- Table header for Discontinued Date -->
 				<th><a
-					href="./dashboard?orderByDiscontinuedDate=${ requestScope['order'] == 'ORDER_BY_DISCONTINUED_DATE_ASC' ? 'desc' : 'asc'}${!empty param.search ? '&search='.concat(param.search) : ''}">Discontinued
+					href="./dashboard?orderByDiscontinuedDate=${ requestScope['order'] == 'ORDER_BY_DISCONTINUED_DATE_ASC' ? 'orderByDiscontinuedDateDesc' : 'orderByDiscontinuedDateAsc'}${!empty param.search ? '&search='.concat(param.search) : ''}">Discontinued
 						Date</a>&nbsp;${ requestScope['order'] == 'ORDER_BY_DISCONTINUED_DATE_ASC' ? 'ASC' : ''}${ requestScope['order'] == 'ORDER_BY_DISCONTINUED_DATE_DESC' ? 'DESC' : ''}</th>
 				<!-- Table header for Company -->
 				<th><a
-					href="./dashboard?orderByCompanyName=${ requestScope['order'] == 'ORDER_BY_COMPANY_NAME_ASC' ? 'desc' : 'asc'}${!empty param.search ? '&search='.concat(param.search) : ''}">Company</a>&nbsp;${ requestScope['order'] == 'ORDER_BY_COMPANY_NAME_ASC' ? 'ASC' : ''}${ requestScope['order'] == 'ORDER_BY_COMPANY_NAME_DESC' ? 'DESC' : ''}</th>
+					href="./dashboard?orderByCompanyName=${ requestScope['order'] == 'ORDER_BY_COMPANY_NAME_ASC' ? 'orderByCompanyNameDesc' : 'orderByCompanyNameAsc'}${!empty param.search ? '&search='.concat(param.search) : ''}">Company</a>&nbsp;${ requestScope['order'] == 'ORDER_BY_COMPANY_NAME_ASC' ? 'ASC' : ''}${ requestScope['order'] == 'ORDER_BY_COMPANY_NAME_DESC' ? 'DESC' : ''}</th>
 				<th>Delete</th>
 			</tr>
 		</thead>

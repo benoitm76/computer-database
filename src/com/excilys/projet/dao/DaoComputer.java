@@ -10,20 +10,18 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.naming.NamingException;
-
 import com.excilys.projet.model.Company;
 import com.excilys.projet.model.Computer;
 import com.excilys.projet.model.ComputerOrder;
 
-public class DaoComputer {
+public class DaoComputer extends Dao<Computer> implements DaoCriteria<Computer> {
 	private final static DaoComputer _instance = new DaoComputer();
 
 	private DaoComputer() {
 
 	}
 
-	public void addComputer(Computer c) throws SQLException, NamingException {
+	public void create(Computer c) {
 		Connection con = null;
 		PreparedStatement statement = null;
 		try {
@@ -52,19 +50,24 @@ public class DaoComputer {
 
 			long id = statement.executeUpdate();
 			c.setId(id);
+		} catch (SQLException e) {
 
 		} finally {
-			if (con != null) {
-				con.close();
-			}
-			if (statement != null) {
-				statement.close();
+			try {
+				if (con != null) {
+					con.close();
+				}
+				if (statement != null) {
+					statement.close();
+				}
+			} catch (SQLException e) {
+
 			}
 
 		}
 	}
 
-	public Computer getComputer(long id) throws NamingException, SQLException {
+	public Computer find(long id) throws SQLException {
 
 		Connection con = null;
 		PreparedStatement statement = null;
@@ -87,23 +90,26 @@ public class DaoComputer {
 			}
 
 		} finally {
-			if (con != null) {
-				con.close();
-			}
-			if (statement != null) {
-				statement.close();
-			}
-			if (rs != null) {
-				rs.close();
+			try {
+				if (con != null) {
+					con.close();
+				}
+				if (statement != null) {
+					statement.close();
+				}
+				if (rs != null) {
+					rs.close();
+				}
+			} catch (SQLException e) {
+
 			}
 
 		}
 		return computer;
 	}
 
-	public List<Computer> searchComputer(String search, ComputerOrder order,
-			int startAt, int numberOfResult) throws NamingException,
-			SQLException {
+	public List<Computer> findAllByCreteria(String search, ComputerOrder order,
+			int startAt, int numberOfRows) throws SQLException {
 		Connection con = null;
 		PreparedStatement statement = null;
 		ResultSet rs = null;
@@ -112,15 +118,26 @@ public class DaoComputer {
 		try {
 			con = DBConnection.getConnection();
 			String sql = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.name "
-					+ "FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.name LIKE ? OR company.name LIKE ?";
+					+ "FROM computer LEFT JOIN company ON computer.company_id = company.id";
+			if (search != null) {
+				sql += " WHERE computer.name LIKE ? OR company.name LIKE ?";
+			}
 			if (order != null) {
 				sql += " ORDER BY " + order.getOrderStatement();
 			}
-			sql += " LIMIT " + startAt + " ," + numberOfResult;
+			sql += " LIMIT ?, ?";
 
 			statement = con.prepareStatement(sql);
-			statement.setString(1, "%" + search + "%");
-			statement.setString(2, "%" + search + "%");
+
+			int i = 0;
+			if (search != null) {
+				statement.setString(1, "%" + search + "%");
+				statement.setString(2, "%" + search + "%");
+				i = 2;
+			}
+			statement.setInt(i + 1, startAt);
+			statement.setInt(i + 2, numberOfRows);
+
 			rs = statement.executeQuery();
 			computers = new ArrayList<>();
 			while (rs.next()) {
@@ -128,24 +145,26 @@ public class DaoComputer {
 						.getDate(3), rs.getDate(4), new Company(rs.getLong(5),
 						rs.getString(6))));
 			}
-
 		} finally {
-			if (con != null) {
-				con.close();
-			}
-			if (statement != null) {
-				statement.close();
-			}
-			if (rs != null) {
-				rs.close();
+			try {
+				if (con != null) {
+					con.close();
+				}
+				if (statement != null) {
+					statement.close();
+				}
+				if (rs != null) {
+					rs.close();
+				}
+			} catch (SQLException e) {
+
 			}
 
 		}
 		return computers;
 	}
 
-	public List<Computer> getAllComputer(ComputerOrder order, int startAt,
-			int numberOfResult) throws NamingException, SQLException {
+	public List<Computer> findAll() throws SQLException {
 
 		Connection con = null;
 		Statement statement = null;
@@ -157,10 +176,6 @@ public class DaoComputer {
 
 			String sql = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.name "
 					+ "FROM computer LEFT JOIN company ON computer.company_id = company.id";
-			if (order != null) {
-				sql += " ORDER BY " + order.getOrderStatement();
-			}
-			sql += " LIMIT " + startAt + " ," + numberOfResult;
 
 			statement = con.createStatement();
 
@@ -174,22 +189,25 @@ public class DaoComputer {
 			}
 
 		} finally {
-			if (con != null) {
-				con.close();
-			}
-			if (statement != null) {
-				statement.close();
-			}
-			if (rs != null) {
-				rs.close();
+			try {
+				if (con != null) {
+					con.close();
+				}
+				if (statement != null) {
+					statement.close();
+				}
+				if (rs != null) {
+					rs.close();
+				}
+			} catch (SQLException e) {
+
 			}
 
 		}
 		return computers;
 	}
 
-	public int getComputerCount(String search) throws NamingException,
-			SQLException {
+	public int count(String search) throws SQLException {
 
 		Connection con = null;
 		PreparedStatement statement = null;
@@ -215,21 +233,25 @@ public class DaoComputer {
 			result = rs.getInt(1);
 
 		} finally {
-			if (con != null) {
-				con.close();
-			}
-			if (statement != null) {
-				statement.close();
-			}
-			if (rs != null) {
-				rs.close();
+			try {
+				if (con != null) {
+					con.close();
+				}
+				if (statement != null) {
+					statement.close();
+				}
+				if (rs != null) {
+					rs.close();
+				}
+			} catch (SQLException e) {
+
 			}
 
 		}
 		return result;
 	}
 
-	public void updateComputer(Computer c) throws SQLException, NamingException {
+	public void update(Computer c) throws SQLException {
 		Connection con = null;
 		PreparedStatement statement = null;
 
@@ -261,17 +283,22 @@ public class DaoComputer {
 			statement.executeUpdate();
 
 		} finally {
-			if (con != null) {
-				con.close();
-			}
-			if (statement != null) {
-				statement.close();
+			try {
+				if (con != null) {
+					con.close();
+				}
+				if (statement != null) {
+					statement.close();
+				}
+
+			} catch (SQLException e) {
+
 			}
 
 		}
 	}
 
-	public void deleteComputer(long id) throws SQLException, NamingException {
+	public void delete(long id) throws SQLException {
 		Connection con = null;
 		PreparedStatement statement = null;
 
@@ -295,7 +322,7 @@ public class DaoComputer {
 		}
 	}
 
-	public static DaoComputer getInstance() {
+	protected static DaoComputer getInstance() {
 		return _instance;
 	}
 }
