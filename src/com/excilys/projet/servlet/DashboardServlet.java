@@ -16,6 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.projet.model.ComputerOrder;
 import com.excilys.projet.service.ComputerService;
@@ -28,11 +30,14 @@ public class DashboardServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	final Logger logger = LoggerFactory.getLogger(DashboardServlet.class);
 
-	/**
-	 * Default constructor.
-	 */
-	public DashboardServlet() {
-		// TODO Auto-generated constructor stub
+	@Autowired
+	private ComputerService computerService;
+
+	@Override
+	public void init() throws ServletException {
+		super.init();
+		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this,
+				getServletContext());
 	}
 
 	/**
@@ -62,17 +67,18 @@ public class DashboardServlet extends HttpServlet {
 		try {
 			int numberOfResult = 0;
 			if (request.getParameter("search") == null) {
-				numberOfResult = ComputerService.getInstance().count(null);
+				numberOfResult = computerService.count(
+						null);
 				numberOfPage = (numberOfResult / 10) + 1;
 				if (page < 1 || page > numberOfPage) {
 					page = 1;
 				}
 				request.setAttribute(
 						"list_computers",
-						ComputerService.getInstance().findAllByCreteria(null,
-								order, (page - 1) * 10, 10));
+						computerService.findAllByCreteria(null, order,
+										(page - 1) * 10, 10));
 			} else {
-				numberOfResult = ComputerService.getInstance().count(
+				numberOfResult = computerService.count(
 						request.getParameter("search"));
 				numberOfPage = (numberOfResult / 10) + 1;
 				queryParameters.put("search", request.getParameter("search"));
@@ -81,9 +87,10 @@ public class DashboardServlet extends HttpServlet {
 				}
 				request.setAttribute(
 						"list_computers",
-						ComputerService.getInstance().findAllByCreteria(
-								request.getParameter("search"), order,
-								(page - 1) * 10, 10));
+						computerService
+								.findAllByCreteria(
+										request.getParameter("search"), order,
+										(page - 1) * 10, 10));
 			}
 			request.setAttribute("current_page", page);
 			request.setAttribute("last_page", numberOfPage);
@@ -105,7 +112,7 @@ public class DashboardServlet extends HttpServlet {
 		List<String> message = new ArrayList<>();
 		if (request.getParameter("id") != null) {
 			try {
-				ComputerService.getInstance().delete(
+				computerService.delete(
 						Long.parseLong(request.getParameter("id")));
 				message.add("Computer deleted");
 			} catch (NumberFormatException | SQLException e) {
@@ -152,6 +159,14 @@ public class DashboardServlet extends HttpServlet {
 		}
 		request.setAttribute("order", order);
 		return order;
+	}
+
+	public ComputerService getComputerService() {
+		return computerService;
+	}
+
+	public void setComputerService(ComputerService computerService) {
+		this.computerService = computerService;
 	}
 
 }

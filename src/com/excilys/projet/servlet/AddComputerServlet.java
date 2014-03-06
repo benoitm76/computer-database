@@ -17,6 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.projet.model.Company;
 import com.excilys.projet.model.Computer;
@@ -31,12 +33,16 @@ public class AddComputerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	final Logger logger = LoggerFactory.getLogger(DashboardServlet.class);
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public AddComputerServlet() {
-		super();
-		// TODO Auto-generated constructor stub
+	@Autowired
+	private CompanyService companyService;
+	@Autowired
+	private ComputerService computerService;
+
+	@Override
+	public void init() throws ServletException {
+		super.init();
+		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this,
+				getServletContext());
 	}
 
 	/**
@@ -49,8 +55,8 @@ public class AddComputerServlet extends HttpServlet {
 		if (request.getParameter("update") != null) {
 
 			try {
-				Computer c = ComputerService.getInstance().find(
-						Long.parseLong(request.getParameter("update")));
+				Computer c = computerService.find(Long.parseLong(request
+						.getParameter("update")));
 				request.setAttribute("computer", c);
 			} catch (SQLException | NumberFormatException e) {
 				// TODO Auto-generated catch block
@@ -62,8 +68,7 @@ public class AddComputerServlet extends HttpServlet {
 				"/addComputer.jsp");
 
 		try {
-			request.setAttribute("list_companies", CompanyService.getInstance()
-					.findAll());
+			request.setAttribute("list_companies", computerService.findAll());
 		} catch (SQLException e) {
 			logger.error("Erreur lors de l'accès à la liste", e);
 		}
@@ -82,8 +87,8 @@ public class AddComputerServlet extends HttpServlet {
 		Computer computer = null;
 		if (request.getParameter("update") != null) {
 			try {
-				computer = ComputerService.getInstance().find(
-						Long.parseLong(request.getParameter("update")));
+				computer = computerService.find(Long.parseLong(request
+						.getParameter("update")));
 				// request.setAttribute("computer", c);
 				isUpdate = true;
 			} catch (SQLException | NumberFormatException e) {
@@ -139,9 +144,8 @@ public class AddComputerServlet extends HttpServlet {
 		 * if (request.getParameter("company") == null) { error = true; } else
 		 */if (!request.getParameter("company").equals("0")) {
 			try {
-				c = CompanyService.getInstance().find(
-						Long.parseLong(request.getParameter("company")
-								.toString()));
+				c = companyService.find(Long.parseLong(request.getParameter(
+						"company").toString()));
 			} catch (SQLException | NumberFormatException e) {
 				// TODO Auto-generated catch block
 				error = true;
@@ -162,7 +166,7 @@ public class AddComputerServlet extends HttpServlet {
 					computer.setIntroduced(introducedDate);
 					computer.setDiscontinued(discontinuedDate);
 					computer.setCompany(c);
-					ComputerService.getInstance().update(computer);
+					computerService.update(computer);
 					message.add("Computer updated");
 				} catch (SQLException e) {
 					error = true;
@@ -171,10 +175,9 @@ public class AddComputerServlet extends HttpServlet {
 				}
 			} else {
 				try {
-					ComputerService.getInstance().create(
-							new Computer(0, (String) request
-									.getParameter("name"), introducedDate,
-									discontinuedDate, c));
+					computerService.create(new Computer(0, (String) request
+							.getParameter("name"), introducedDate,
+							discontinuedDate, c));
 					message.add("Computer inserted");
 				} catch (SQLException e) {
 					error = true;
@@ -186,5 +189,21 @@ public class AddComputerServlet extends HttpServlet {
 		request.setAttribute("error", error);
 		request.setAttribute("message", message);
 		doGet(request, response);
+	}
+
+	public CompanyService getCompanyService() {
+		return companyService;
+	}
+
+	public void setCompanyService(CompanyService companyService) {
+		this.companyService = companyService;
+	}
+
+	public ComputerService getComputerService() {
+		return computerService;
+	}
+
+	public void setComputerService(ComputerService computerService) {
+		this.computerService = computerService;
 	}
 }

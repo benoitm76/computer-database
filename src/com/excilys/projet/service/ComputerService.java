@@ -3,23 +3,24 @@ package com.excilys.projet.service;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.excilys.projet.dao.DBConnection;
-import com.excilys.projet.dao.DaoFactory;
+import com.excilys.projet.dao.DaoComputer;
 import com.excilys.projet.model.Computer;
 import com.excilys.projet.model.ComputerOrder;
 
+@Service
 public class ComputerService {
-	private final static ComputerService _instance = new ComputerService();
-
-	private ComputerService() {
-
-	}
+	@Autowired
+	private DaoComputer daoComputer;
 
 	public Computer find(long id) throws SQLException {
 		Computer computer = null;
 		try {
 			DBConnection.openConnection();
-			computer = DaoFactory.getDaoComputer().find(id);
+			computer = daoComputer.find(id);
 		} finally {
 			DBConnection.closeConnection();
 		}
@@ -32,7 +33,7 @@ public class ComputerService {
 		List<Computer> computers = null;
 		try {
 			DBConnection.openConnection();
-			computers = DaoFactory.getDaoComputer().findAllByCreteria(search,
+			computers = daoComputer.findAllByCreteria(search,
 					order, startAt, numberOfRows);
 		} finally {
 			DBConnection.closeConnection();
@@ -44,7 +45,7 @@ public class ComputerService {
 		List<Computer> computers = null;
 		try {
 			DBConnection.openConnection();
-			computers = DaoFactory.getDaoComputer().findAll();
+			computers = daoComputer.findAll();
 		} finally {
 			DBConnection.closeConnection();
 		}
@@ -54,7 +55,7 @@ public class ComputerService {
 	public void create(Computer c) throws SQLException {
 		try {
 			DBConnection.openConnection();
-			DaoFactory.getDaoComputer().create(c);
+			daoComputer.create(c);
 		} finally {
 			DBConnection.closeConnection();
 		}
@@ -63,7 +64,7 @@ public class ComputerService {
 	public void update(Computer c) throws SQLException {
 		try {
 			DBConnection.openConnection();
-			DaoFactory.getDaoComputer().update(c);
+			daoComputer.update(c);
 		} finally {
 			DBConnection.closeConnection();
 		}
@@ -72,7 +73,7 @@ public class ComputerService {
 	public void delete(long id) throws SQLException {
 		try {
 			DBConnection.openConnection();
-			DaoFactory.getDaoComputer().delete(id);
+			daoComputer.delete(id);
 		} finally {
 			DBConnection.closeConnection();
 		}
@@ -82,7 +83,7 @@ public class ComputerService {
 		int count = 0;
 		try {
 			DBConnection.openConnection();
-			count = DaoFactory.getDaoComputer().count(search);
+			count = daoComputer.count(search);
 		} finally {
 			DBConnection.closeConnection();
 		}
@@ -90,7 +91,11 @@ public class ComputerService {
 		return count;
 	}
 
-	public static ComputerService getInstance() {
-		return _instance;
+	public DaoComputer getDaoComputer() {
+		return daoComputer;
+	}
+
+	public void setDaoComputer(DaoComputer daoComputer) {
+		this.daoComputer = daoComputer;
 	}
 }
