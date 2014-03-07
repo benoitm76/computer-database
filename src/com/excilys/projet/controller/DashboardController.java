@@ -15,7 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.excilys.projet.dao.DaoComputer;
+import com.excilys.projet.model.Computer;
 import com.excilys.projet.model.ComputerOrder;
+import com.excilys.projet.model.dto.ComputerDTO;
 import com.excilys.projet.service.ComputerService;
 
 @Controller
@@ -38,6 +41,7 @@ public class DashboardController {
 		if (computerOrder != null) {
 			queryParameters.put("order", computerOrder.getUrlParameter());
 		}
+		List<Computer> computers = new ArrayList<>();
 		try {
 			int numberOfResult = 0;
 			if (search == null) {
@@ -46,9 +50,9 @@ public class DashboardController {
 				if (page < 1 || page > numberOfPage) {
 					page = 1;
 				}
-				model.addAttribute("list_computers", computerService
+				computers =  computerService
 						.findAllByCreteria(null, computerOrder,
-								(page - 1) * 10, 10));
+								(page - 1) * 10, 10);
 			} else {
 				numberOfResult = computerService.count(search);
 				numberOfPage = (numberOfResult / 10) + 1;
@@ -56,13 +60,19 @@ public class DashboardController {
 				if (page < 1 || page > numberOfPage) {
 					page = 1;
 				}
-				model.addAttribute("list_computers", computerService
+				computers = computerService
 						.findAllByCreteria(search, computerOrder,
-								(page - 1) * 10, 10));
+								(page - 1) * 10, 10);
 			}
 			model.addAttribute("current_page", page);
 			model.addAttribute("last_page", numberOfPage);
 			model.addAttribute("number_of_result", numberOfResult);
+			List<ComputerDTO> computersDTO = new ArrayList<>();
+			for(Computer c : computers)
+			{
+				computersDTO.add(DaoComputer.createDTO(c));
+			}
+			model.addAttribute("list_computers", computersDTO);
 		} catch (SQLException e) {
 			logger.error("Erreur lors de l'accès à la liste", e);
 		}

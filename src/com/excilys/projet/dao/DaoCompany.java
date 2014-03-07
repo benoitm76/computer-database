@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.excilys.projet.dao.mapper.CompanyMapper;
 import com.excilys.projet.model.Company;
+import com.excilys.projet.model.dto.CompanyDTO;
 
 public class DaoCompany extends Dao<Company> {
 
@@ -43,6 +44,26 @@ public class DaoCompany extends Dao<Company> {
 	public void delete(long id) {
 		// TODO Auto-generated method stub
 
+	}
+
+	public static CompanyDTO createDTO(Company c) {
+		CompanyDTO cDto = null;
+		if (c != null) {
+			cDto = new CompanyDTO();
+			cDto.setId(c.getId());
+			cDto.setName(c.getName());
+		}
+		return cDto;
+	}
+
+	public static Company createEntity(CompanyDTO cDto) {
+		Company c = null;
+		if (cDto != null) {
+			c = new Company();
+			c.setId(cDto.getId());
+			c.setName(cDto.getName());
+		}
+		return c;
 	}
 
 }

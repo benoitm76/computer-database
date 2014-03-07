@@ -8,8 +8,10 @@ import java.util.Map;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.excilys.projet.dao.mapper.ComputerMapper;
+import com.excilys.projet.model.Company;
 import com.excilys.projet.model.Computer;
 import com.excilys.projet.model.ComputerOrder;
+import com.excilys.projet.model.dto.ComputerDTO;
 
 public class DaoComputer extends Dao<Computer> implements DaoCriteria<Computer> {
 	private JdbcTemplate jt;
@@ -95,9 +97,34 @@ public class DaoComputer extends Dao<Computer> implements DaoCriteria<Computer> 
 	}
 
 	public void delete(long id) throws SQLException {
-
 		jt = getJdbcTemplate();
 		jt.update("DELETE FROM computer WHERE id = ?;", new Object[] { id });
+	}
 
+	public static ComputerDTO createDTO(Computer c) {
+		ComputerDTO cDto = null;
+		if (c != null) {
+			cDto = new ComputerDTO();
+			cDto.setId(c.getId());
+			cDto.setName(c.getName());
+			cDto.setIntroduced(c.getIntroduced());
+			cDto.setDiscontinued(c.getDiscontinued());
+			cDto.setCompanyId(c.getCompany().getId());
+			cDto.setCompanyName(c.getCompany().getName());
+		}
+		return cDto;
+	}
+
+	public static Computer createEntity(ComputerDTO cDto) {
+		Computer c = null;
+		if (cDto != null) {
+			c = new Computer();
+			c.setId(cDto.getId());
+			c.setName(cDto.getName());
+			c.setIntroduced(cDto.getIntroduced());
+			c.setDiscontinued(cDto.getDiscontinued());
+			c.setCompany(new Company(cDto.getCompanyId(), cDto.getCompanyName()));
+		}
+		return c;
 	}
 }

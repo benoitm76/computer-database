@@ -2,25 +2,26 @@ package com.excilys.projet.controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import javax.servlet.ServletException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.excilys.projet.model.Company;
+import com.excilys.projet.dao.DaoComputer;
 import com.excilys.projet.model.Computer;
+import com.excilys.projet.model.dto.ComputerDTO;
 import com.excilys.projet.service.CompanyService;
 import com.excilys.projet.service.ComputerService;
 
@@ -45,6 +46,7 @@ public class AddComputerController {
 			try {
 				Computer c = computerService.find(update);
 				model.addAttribute("computer", c);
+				model.addAttribute("cDTO", DaoComputer.createDTO(c));
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -52,7 +54,7 @@ public class AddComputerController {
 
 		}
 		try {
-			model.addAttribute("list_companies", computerService.findAll());
+			model.addAttribute("list_companies", companyService.findAll());
 		} catch (SQLException e) {
 			logger.error("Erreur lors de l'accès à la liste", e);
 		}
@@ -61,112 +63,52 @@ public class AddComputerController {
 
 	@RequestMapping(method = RequestMethod.POST)
 	private void doPost(ModelMap model,
-			@RequestParam(required = false) Long update,
-			@RequestParam String name,
-			@RequestParam(required = false) String introducedDate,
-			@RequestParam(required = false) String discontinuedDate,
-			@RequestParam(required = false) Long company)
+			@RequestParam(required = false) Long update, ComputerDTO cDTO)
 			throws ServletException, IOException {
-		boolean error = false;
 		boolean isUpdate = false;
-		List<String> message = new ArrayList<>();
-		Computer computer = null;
+
 		if (update != null) {
 			try {
-				computer = computerService.find(update);
-				// request.setAttribute("computer", c);
-				isUpdate = true;
-			} catch (SQLException | NumberFormatException e) {
+				Computer computer = computerService.find(update);
+				if (computer != null) {
+					isUpdate = true;
+				}
+			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		if (name.equals("")) {
-			error = true;
-			message.add("Name invalid");
-			logger.error("Name invalid");
-		}
 
-		SimpleDateFormat dtf = new SimpleDateFormat("yyyy-MM-dd");
-		Date cIntroducedDate = null;
-		Date cDiscontinuedDate = null;
-
-		if (introducedDate != null && !introducedDate.equals("")) {
+		if (isUpdate) {
 			try {
-				cIntroducedDate = dtf.parse(introducedDate);
-			} catch (ParseException e) {
-				error = true;
-				message.add("Introduced date invalid");
-				logger.error("Introduced date invalid", e);
-			}
-		} /*
-		 * else if (request.getParameter("introducedDate") == null) { error =
-		 * true; errorMessage.add("Introduced date null");
-		 * logger.error("Introduced date null"); }
-		 */
+				computerService.update(DaoComputer.createEntity(cDTO));
 
-		if (discontinuedDate != null && !discontinuedDate.equals("")) {
-			try {
-				cDiscontinuedDate = dtf.parse(discontinuedDate);
-			} catch (ParseException e) {
-				error = true;
-				message.add("Discontinued date invalid");
-				logger.error("Discontinued date invalid", e);
-			}
-		} /*
-		 * else if (request.getParameter("discontinuedDate") == null) { error =
-		 * true; errorMessage.add("Discontinued date null");
-		 * logger.error("Discontinued date null"); }
-		 */
-
-		Company c = null;
-		/*
-		 * if (request.getParameter("company") == null) { error = true; } else
-		 */if (company.equals("0")) {
-			try {
-				c = companyService.find(company);
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				error = true;
-				message.add("Error when get company");
-				logger.error("Error when get company", e);
+
+				logger.error("Error when update computer", e);
 			}
-			if (c == null) {
-				error = true;
-				message.add("Company not found");
-				logger.error("Company non trouvé");
+		} else {
+			try {
+				computerService.create(DaoComputer.createEntity(cDTO));
+
+			} catch (SQLException e) {
+
+				logger.error("Error when insert new computer", e);
 			}
 		}
 
-		if (!error) {
-			if (isUpdate) {
-				try {
-					computer.setName(name);
-					computer.setIntroduced(cIntroducedDate);
-					computer.setDiscontinued(cDiscontinuedDate);
-					computer.setCompany(c);
-					computerService.update(computer);
-					message.add("Computer updated");
-				} catch (SQLException e) {
-					error = true;
-					message.add("Error when update computer");
-					logger.error("Error when update computer", e);
-				}
-			} else {
-				try {
-					computerService.create(new Computer(0, name,
-							cIntroducedDate, cDiscontinuedDate, c));
-					message.add("Computer inserted");
-				} catch (SQLException e) {
-					error = true;
-					message.add("Error when insert new computer");
-					logger.error("Error when insert new computer", e);
-				}
-			}
-		}
-		model.addAttribute("error", error);
-		model.addAttribute("message", message);
+		System.out.println(cDTO);
 		doGet(model, update);
+	}
+
+	@InitBinder
+	private void dateBinder(WebDataBinder binder) {
+		// The date format to parse or output your dates
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		// Create a new CustomDateEditor
+		CustomDateEditor editor = new CustomDateEditor(dateFormat, true);
+		// Register it as custom editor for the Date type
+		binder.registerCustomEditor(Date.class, editor);
 	}
 
 	public CompanyService getCompanyService() {

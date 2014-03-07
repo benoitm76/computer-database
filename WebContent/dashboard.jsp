@@ -55,7 +55,7 @@
 							value="${computer.introduced}" /></td>
 					<td><fmt:formatDate pattern="yyyy-MM-dd"
 							value="${computer.discontinued}" /></td>
-					<td>${computer.company.name}</td>
+					<td>${computer.companyName}</td>
 					<td>
 						<form class="delete_form" action="./dashboard" method="POST">
 							<input type="hidden" name="id" value="${computer.id}" /> <input
