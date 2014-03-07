@@ -10,7 +10,7 @@
    	http://www.springframework.org/schema/context/spring-context-3.0.xsd ">
 
 	<context:annotation-config />
-	<context:component-scan base-package="com.excilys.projet.service" />
+	<context:component-scan base-package="com.excilys.projet" />
 
 	<bean id="aDataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
@@ -27,4 +27,5 @@
 	<bean id="daoComputer" class="com.excilys.projet.dao.DaoComputer">
 		<property name="dataSource" ref="aDataSource" />
 	</bean>
+
 </beans>

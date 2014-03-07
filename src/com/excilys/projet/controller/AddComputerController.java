@@ -1,4 +1,4 @@
-package com.excilys.projet.servlet;
+package com.excilys.projet.controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -8,87 +8,72 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.excilys.projet.model.Company;
 import com.excilys.projet.model.Computer;
 import com.excilys.projet.service.CompanyService;
 import com.excilys.projet.service.ComputerService;
 
-/**
- * Servlet implementation class AddComputerServlet
- */
-@WebServlet("/addComputer")
-public class AddComputerServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-	final Logger logger = LoggerFactory.getLogger(DashboardServlet.class);
+@Controller
+@RequestMapping("/addComputer")
+public class AddComputerController {
+
+	final Logger logger = LoggerFactory.getLogger(AddComputerController.class);
 
 	@Autowired
 	private CompanyService companyService;
 	@Autowired
 	private ComputerService computerService;
 
-	@Override
-	public void init() throws ServletException {
-		super.init();
-		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this,
-				getServletContext());
-	}
+	@RequestMapping(method = RequestMethod.GET)
+	private String doGet(ModelMap model,
+			@RequestParam(required = false) Long update)
+			throws ServletException, IOException {
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doGet(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-
-		if (request.getParameter("update") != null) {
+		if (update != null) {
 
 			try {
-				Computer c = computerService.find(Long.parseLong(request
-						.getParameter("update")));
-				request.setAttribute("computer", c);
-			} catch (SQLException | NumberFormatException e) {
+				Computer c = computerService.find(update);
+				model.addAttribute("computer", c);
+			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
 		}
-		RequestDispatcher rd = getServletContext().getRequestDispatcher(
-				"/addComputer.jsp");
-
 		try {
-			request.setAttribute("list_companies", computerService.findAll());
+			model.addAttribute("list_companies", computerService.findAll());
 		} catch (SQLException e) {
 			logger.error("Erreur lors de l'accès à la liste", e);
 		}
-		rd.forward(request, response);
+		return "addComputer";
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doPost(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+	@RequestMapping(method = RequestMethod.POST)
+	private void doPost(ModelMap model,
+			@RequestParam(required = false) Long update,
+			@RequestParam String name,
+			@RequestParam(required = false) String introducedDate,
+			@RequestParam(required = false) String discontinuedDate,
+			@RequestParam(required = false) Long company)
+			throws ServletException, IOException {
 		boolean error = false;
 		boolean isUpdate = false;
 		List<String> message = new ArrayList<>();
 		Computer computer = null;
-		if (request.getParameter("update") != null) {
+		if (update != null) {
 			try {
-				computer = computerService.find(Long.parseLong(request
-						.getParameter("update")));
+				computer = computerService.find(update);
 				// request.setAttribute("computer", c);
 				isUpdate = true;
 			} catch (SQLException | NumberFormatException e) {
@@ -96,22 +81,19 @@ public class AddComputerServlet extends HttpServlet {
 				e.printStackTrace();
 			}
 		}
-		if (request.getParameter("name") == null
-				|| request.getParameter("name").equals("")) {
+		if (name.equals("")) {
 			error = true;
 			message.add("Name invalid");
 			logger.error("Name invalid");
 		}
 
 		SimpleDateFormat dtf = new SimpleDateFormat("yyyy-MM-dd");
-		Date introducedDate = null;
-		Date discontinuedDate = null;
+		Date cIntroducedDate = null;
+		Date cDiscontinuedDate = null;
 
-		if (request.getParameter("introducedDate") != null
-				&& !request.getParameter("introducedDate").equals("")) {
+		if (introducedDate != null && !introducedDate.equals("")) {
 			try {
-				introducedDate = dtf.parse(request.getParameter(
-						"introducedDate").toString());
+				cIntroducedDate = dtf.parse(introducedDate);
 			} catch (ParseException e) {
 				error = true;
 				message.add("Introduced date invalid");
@@ -123,11 +105,9 @@ public class AddComputerServlet extends HttpServlet {
 		 * logger.error("Introduced date null"); }
 		 */
 
-		if (request.getParameter("discontinuedDate") != null
-				&& !request.getParameter("discontinuedDate").equals("")) {
+		if (discontinuedDate != null && !discontinuedDate.equals("")) {
 			try {
-				discontinuedDate = dtf.parse(request.getParameter(
-						"discontinuedDate").toString());
+				cDiscontinuedDate = dtf.parse(discontinuedDate);
 			} catch (ParseException e) {
 				error = true;
 				message.add("Discontinued date invalid");
@@ -142,11 +122,10 @@ public class AddComputerServlet extends HttpServlet {
 		Company c = null;
 		/*
 		 * if (request.getParameter("company") == null) { error = true; } else
-		 */if (!request.getParameter("company").equals("0")) {
+		 */if (company.equals("0")) {
 			try {
-				c = companyService.find(Long.parseLong(request.getParameter(
-						"company").toString()));
-			} catch (SQLException | NumberFormatException e) {
+				c = companyService.find(company);
+			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				error = true;
 				message.add("Error when get company");
@@ -162,9 +141,9 @@ public class AddComputerServlet extends HttpServlet {
 		if (!error) {
 			if (isUpdate) {
 				try {
-					computer.setName((String) request.getParameter("name"));
-					computer.setIntroduced(introducedDate);
-					computer.setDiscontinued(discontinuedDate);
+					computer.setName(name);
+					computer.setIntroduced(cIntroducedDate);
+					computer.setDiscontinued(cDiscontinuedDate);
 					computer.setCompany(c);
 					computerService.update(computer);
 					message.add("Computer updated");
@@ -175,9 +154,8 @@ public class AddComputerServlet extends HttpServlet {
 				}
 			} else {
 				try {
-					computerService.create(new Computer(0, (String) request
-							.getParameter("name"), introducedDate,
-							discontinuedDate, c));
+					computerService.create(new Computer(0, name,
+							cIntroducedDate, cDiscontinuedDate, c));
 					message.add("Computer inserted");
 				} catch (SQLException e) {
 					error = true;
@@ -186,9 +164,9 @@ public class AddComputerServlet extends HttpServlet {
 				}
 			}
 		}
-		request.setAttribute("error", error);
-		request.setAttribute("message", message);
-		doGet(request, response);
+		model.addAttribute("error", error);
+		model.addAttribute("message", message);
+		doGet(model, update);
 	}
 
 	public CompanyService getCompanyService() {
@@ -206,4 +184,5 @@ public class AddComputerServlet extends HttpServlet {
 	public void setComputerService(ComputerService computerService) {
 		this.computerService = computerService;
 	}
+
 }
