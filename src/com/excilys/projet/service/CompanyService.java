@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.excilys.projet.dao.DBConnection;
 import com.excilys.projet.dao.DaoCompany;
 import com.excilys.projet.model.Company;
 
@@ -17,51 +16,30 @@ public class CompanyService {
 
 	public Company find(long id) throws SQLException {
 		Company company = null;
-		try {
-			DBConnection.openConnection();
-			company = daoCompany.find(id);
-		} finally {
-			DBConnection.closeConnection();
-		}
+
+		company = daoCompany.find(id);
+
 		return company;
 	}
 
 	public List<Company> findAll() throws SQLException {
 		List<Company> companies = null;
-		try {
-			DBConnection.openConnection();
-			companies = daoCompany.findAll();
-		} finally {
-			DBConnection.closeConnection();
-		}
+
+		companies = daoCompany.findAll();
+
 		return companies;
 	}
 
 	public void create(Company c) throws SQLException {
-		try {
-			DBConnection.openConnection();
-			daoCompany.create(c);
-		} finally {
-			DBConnection.closeConnection();
-		}
+		daoCompany.create(c);
 	}
 
 	public void update(Company c) throws SQLException {
-		try {
-			DBConnection.openConnection();
-			daoCompany.update(c);
-		} finally {
-			DBConnection.closeConnection();
-		}
+		daoCompany.update(c);
 	}
 
 	public void delete(long id) throws SQLException {
-		try {
-			DBConnection.openConnection();
-			daoCompany.delete(id);
-		} finally {
-			DBConnection.closeConnection();
-		}
+		daoCompany.delete(id);
 	}
 
 	public DaoCompany getDaoCompany() {

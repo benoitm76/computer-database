@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.excilys.projet.dao.DBConnection;
 import com.excilys.projet.dao.DaoComputer;
 import com.excilys.projet.model.Computer;
 import com.excilys.projet.model.ComputerOrder;
@@ -18,12 +17,9 @@ public class ComputerService {
 
 	public Computer find(long id) throws SQLException {
 		Computer computer = null;
-		try {
-			DBConnection.openConnection();
-			computer = daoComputer.find(id);
-		} finally {
-			DBConnection.closeConnection();
-		}
+
+		computer = daoComputer.find(id);
+
 		return computer;
 	}
 
@@ -31,64 +27,35 @@ public class ComputerService {
 			int startAt, int numberOfRows) throws SQLException {
 
 		List<Computer> computers = null;
-		try {
-			DBConnection.openConnection();
-			computers = daoComputer.findAllByCreteria(search,
-					order, startAt, numberOfRows);
-		} finally {
-			DBConnection.closeConnection();
-		}
+
+		computers = daoComputer.findAllByCreteria(search, order, startAt,
+				numberOfRows);
+
 		return computers;
 	}
 
 	public List<Computer> findAll() throws SQLException {
 		List<Computer> computers = null;
-		try {
-			DBConnection.openConnection();
-			computers = daoComputer.findAll();
-		} finally {
-			DBConnection.closeConnection();
-		}
+
+		computers = daoComputer.findAll();
+
 		return computers;
 	}
 
 	public void create(Computer c) throws SQLException {
-		try {
-			DBConnection.openConnection();
-			daoComputer.create(c);
-		} finally {
-			DBConnection.closeConnection();
-		}
+		daoComputer.create(c);
 	}
 
 	public void update(Computer c) throws SQLException {
-		try {
-			DBConnection.openConnection();
-			daoComputer.update(c);
-		} finally {
-			DBConnection.closeConnection();
-		}
+		daoComputer.update(c);
 	}
 
 	public void delete(long id) throws SQLException {
-		try {
-			DBConnection.openConnection();
-			daoComputer.delete(id);
-		} finally {
-			DBConnection.closeConnection();
-		}
+		daoComputer.delete(id);
 	}
 
 	public int count(String search) throws SQLException {
-		int count = 0;
-		try {
-			DBConnection.openConnection();
-			count = daoComputer.count(search);
-		} finally {
-			DBConnection.closeConnection();
-		}
-		
-		return count;
+		return daoComputer.count(search);
 	}
 
 	public DaoComputer getDaoComputer() {
