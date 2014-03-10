@@ -1,11 +1,10 @@
 package com.excilys.projet.controller;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import javax.servlet.ServletException;
+import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,12 +12,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.excilys.projet.controller.validator.ComputerValidator;
 import com.excilys.projet.dao.DaoComputer;
 import com.excilys.projet.model.Computer;
 import com.excilys.projet.model.dto.ComputerDTO;
@@ -36,23 +38,27 @@ public class AddComputerController {
 	@Autowired
 	private ComputerService computerService;
 
+	@Autowired
+	private ComputerValidator computerValidator;
+
 	@RequestMapping(method = RequestMethod.GET)
 	private String doGet(ModelMap model,
-			@RequestParam(required = false) Long update)
-			throws ServletException, IOException {
+			@RequestParam(required = false) Long update) {
+
+		ComputerDTO cDTO = new ComputerDTO();
 
 		if (update != null) {
 
 			try {
 				Computer c = computerService.find(update);
-				model.addAttribute("computer", c);
-				model.addAttribute("cDTO", DaoComputer.createDTO(c));
+				cDTO = DaoComputer.createDTO(c);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
 		}
+		model.addAttribute("cDTO", cDTO);
 		try {
 			model.addAttribute("list_companies", companyService.findAll());
 		} catch (SQLException e) {
@@ -62,9 +68,9 @@ public class AddComputerController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	private void doPost(ModelMap model,
-			@RequestParam(required = false) Long update, ComputerDTO cDTO)
-			throws ServletException, IOException {
+	private String doPost(@RequestParam(required = false) Long update,
+			@Valid @ModelAttribute("cDTO") ComputerDTO cDTO,
+			BindingResult result, ModelMap model) {
 		boolean isUpdate = false;
 
 		if (update != null) {
@@ -78,27 +84,35 @@ public class AddComputerController {
 				e.printStackTrace();
 			}
 		}
+		if (!result.hasErrors()) {
+			if (isUpdate) {
+				try {
+					computerService.update(DaoComputer.createEntity(cDTO));
 
-		if (isUpdate) {
-			try {
-				computerService.update(DaoComputer.createEntity(cDTO));
+				} catch (SQLException e) {
 
-			} catch (SQLException e) {
+					logger.error("Error when update computer", e);
+				}
+			} else {
+				try {
+					computerService.create(DaoComputer.createEntity(cDTO));
 
-				logger.error("Error when update computer", e);
-			}
-		} else {
-			try {
-				computerService.create(DaoComputer.createEntity(cDTO));
+				} catch (SQLException e) {
 
-			} catch (SQLException e) {
-
-				logger.error("Error when insert new computer", e);
+					logger.error("Error when insert new computer", e);
+				}
 			}
 		}
 
 		System.out.println(cDTO);
-		doGet(model, update);
+		model.addAttribute("cDTO", cDTO);
+		try {
+			model.addAttribute("list_companies", companyService.findAll());
+		} catch (SQLException e) {
+			logger.error("Erreur lors de l'accès à la liste", e);
+		}
+		return "addComputer";
+		// doGet(model, update);
 	}
 
 	@InitBinder
@@ -109,6 +123,7 @@ public class AddComputerController {
 		CustomDateEditor editor = new CustomDateEditor(dateFormat, true);
 		// Register it as custom editor for the Date type
 		binder.registerCustomEditor(Date.class, editor);
+		binder.addValidators(computerValidator);
 	}
 
 	public CompanyService getCompanyService() {

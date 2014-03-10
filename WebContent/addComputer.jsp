@@ -27,6 +27,7 @@
 				<div class="input">
 					<form:input path="name" />
 					<span class="help-inline">Required</span>
+					<form:errors path="name"/>
 				</div>
 			</div>
 			<div class="clearfix">
@@ -34,6 +35,7 @@
 				<div class="input">
 					<form:input type="date" pattern="yyyy-MM-dd" path="introduced" />
 					<span class="help-inline">YYYY-MM-DD</span>
+					<form:errors path="introduced"/>
 				</div>
 			</div>
 			<div class="clearfix">
@@ -41,6 +43,7 @@
 				<div class="input">
 					<form:input type="date" pattern="yyyy-MM-dd" path="discontinued" />
 					<span class="help-inline">YYYY-MM-DD</span>
+					<form:errors path="discontinued"/>
 				</div>
 			</div>
 			<div class="clearfix">
@@ -51,6 +54,7 @@
 						<form:options items="${list_companies}"
 							itemValue="id" itemLabel="name" />
 					</form:select>
+					<form:errors path="companyId"/>
 				</div>
 			</div>
 		</fieldset>

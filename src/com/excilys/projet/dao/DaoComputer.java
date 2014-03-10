@@ -123,7 +123,10 @@ public class DaoComputer extends Dao<Computer> implements DaoCriteria<Computer> 
 			c.setName(cDto.getName());
 			c.setIntroduced(cDto.getIntroduced());
 			c.setDiscontinued(cDto.getDiscontinued());
-			c.setCompany(new Company(cDto.getCompanyId(), cDto.getCompanyName()));
+			if (cDto.getCompanyId() != 0) {
+				c.setCompany(new Company(cDto.getCompanyId(), cDto
+						.getCompanyName()));
+			}
 		}
 		return c;
 	}
