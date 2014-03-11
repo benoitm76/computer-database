@@ -28,4 +28,17 @@
 		<property name="dataSource" ref="aDataSource" />
 	</bean>
 
+	<!-- Locale source bean -->
+	<bean id="messageSource"
+		class="org.springframework.context.support.ResourceBundleMessageSource">
+		<!-- Locale source file prefix -->
+		<property name="basename" value="language" />
+		<property name="defaultEncoding" value="UTF-8" />
+	</bean>
+
+	<!-- Default locale (Session) -->
+	<bean id="localeResolver"
+		class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
+		<property name="defaultLocale" value="fr_FR" />
+	</bean>
 </beans>

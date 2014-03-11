@@ -21,7 +21,7 @@ public class ComputerValidator implements Validator {
 	public void validate(Object o, Errors e) {
 		ComputerDTO obj = (ComputerDTO) o;
 		if (obj.getName() == null || obj.getName().trim().isEmpty()) {
-			e.rejectValue("name", "computer.name.error",
+			e.rejectValue("name", "computer.name.empty",
 					"Invalid name provided");
 		}
 

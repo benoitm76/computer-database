@@ -1,13 +1,16 @@
 package com.excilys.projet.model.dto;
 
-import java.util.Date;
+import org.joda.time.LocalDate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 public class ComputerDTO {
 
 	private long id;
 	private String name;
-	private Date introduced;
-	private Date discontinued;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate introduced;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate discontinued;
 	private long companyId;
 	private String companyName;
 
@@ -15,8 +18,8 @@ public class ComputerDTO {
 
 	}
 
-	public ComputerDTO(long id, String name, Date introduced,
-			Date discontinued, long companyId, String companyName) {
+	public ComputerDTO(long id, String name, LocalDate introduced,
+			LocalDate discontinued, long companyId, String companyName) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -42,19 +45,19 @@ public class ComputerDTO {
 		this.name = name;
 	}
 
-	public Date getIntroduced() {
+	public LocalDate getIntroduced() {
 		return introduced;
 	}
 
-	public void setIntroduced(Date introduced) {
+	public void setIntroduced(LocalDate introduced) {
 		this.introduced = introduced;
 	}
 
-	public Date getDiscontinued() {
+	public LocalDate getDiscontinued() {
 		return discontinued;
 	}
 
-	public void setDiscontinued(Date discontinued) {
+	public void setDiscontinued(LocalDate discontinued) {
 		this.discontinued = discontinued;
 	}
 

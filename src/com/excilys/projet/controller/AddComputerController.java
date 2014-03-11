@@ -1,15 +1,12 @@
 package com.excilys.projet.controller;
 
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -88,7 +85,7 @@ public class AddComputerController {
 			if (isUpdate) {
 				try {
 					computerService.update(DaoComputer.createEntity(cDTO));
-
+					cDTO = new ComputerDTO();
 				} catch (SQLException e) {
 
 					logger.error("Error when update computer", e);
@@ -96,15 +93,13 @@ public class AddComputerController {
 			} else {
 				try {
 					computerService.create(DaoComputer.createEntity(cDTO));
-
+					cDTO = new ComputerDTO();
 				} catch (SQLException e) {
 
 					logger.error("Error when insert new computer", e);
 				}
 			}
 		}
-
-		System.out.println(cDTO);
 		model.addAttribute("cDTO", cDTO);
 		try {
 			model.addAttribute("list_companies", companyService.findAll());
@@ -116,13 +111,7 @@ public class AddComputerController {
 	}
 
 	@InitBinder
-	private void dateBinder(WebDataBinder binder) {
-		// The date format to parse or output your dates
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		// Create a new CustomDateEditor
-		CustomDateEditor editor = new CustomDateEditor(dateFormat, true);
-		// Register it as custom editor for the Date type
-		binder.registerCustomEditor(Date.class, editor);
+	private void binder(WebDataBinder binder) {
 		binder.addValidators(computerValidator);
 	}
 

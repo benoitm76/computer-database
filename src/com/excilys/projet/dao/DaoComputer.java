@@ -1,6 +1,7 @@
 package com.excilys.projet.dao;
 
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,10 +23,17 @@ public class DaoComputer extends Dao<Computer> implements DaoCriteria<Computer> 
 			companyID = c.getCompany().getId();
 		}
 		jt = getJdbcTemplate();
+		Date introduced = null;
+		Date discontinued = null;
+		if (c.getIntroduced() != null) {
+			introduced = c.getIntroduced().toDate();
+		}
+		if (c.getDiscontinued() != null) {
+			discontinued = c.getDiscontinued().toDate();
+		}
 		jt.update(
 				"INSERT INTO computer VALUES(NULL, ?, ?, ?, ?);",
-				new Object[] { c.getName(), c.getIntroduced(),
-						c.getDiscontinued(), companyID });
+				new Object[] { c.getName(), introduced, discontinued, companyID });
 	}
 
 	public Computer find(long id) throws SQLException {
@@ -90,10 +98,18 @@ public class DaoComputer extends Dao<Computer> implements DaoCriteria<Computer> 
 			companyID = c.getCompany().getId();
 		}
 		jt = getJdbcTemplate();
+		Date introduced = null;
+		Date discontinued = null;
+		if (c.getIntroduced() != null) {
+			introduced = c.getIntroduced().toDate();
+		}
+		if (c.getDiscontinued() != null) {
+			discontinued = c.getDiscontinued().toDate();
+		}
 		jt.update(
 				"UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?",
-				new Object[] { c.getName(), c.getIntroduced(),
-						c.getDiscontinued(), companyID, c.getId() });
+				new Object[] { c.getName(), introduced, discontinued,
+						companyID, c.getId() });
 	}
 
 	public void delete(long id) throws SQLException {
