@@ -135,21 +135,4 @@ public class AddComputerController {
 	private void binder(WebDataBinder binder) {
 		binder.addValidators(computerValidator);
 	}
-
-	public CompanyService getCompanyService() {
-		return companyService;
-	}
-
-	public void setCompanyService(CompanyService companyService) {
-		this.companyService = companyService;
-	}
-
-	public ComputerService getComputerService() {
-		return computerService;
-	}
-
-	public void setComputerService(ComputerService computerService) {
-		this.computerService = computerService;
-	}
-
 }

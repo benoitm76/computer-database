@@ -132,13 +132,4 @@ public class DashboardController {
 		model.addAttribute("order", order);
 		return order;
 	}
-
-	public ComputerService getComputerService() {
-		return computerService;
-	}
-
-	public void setComputerService(ComputerService computerService) {
-		this.computerService = computerService;
-	}
-
 }
