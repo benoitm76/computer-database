@@ -1,6 +1,8 @@
 package com.excilys.projet.controller;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -55,11 +57,16 @@ public class AddComputerController {
 			}
 
 		}
+		
 		model.addAttribute("cDTO", cDTO);
 		try {
 			model.addAttribute("list_companies", companyService.findAll());
 		} catch (SQLException e) {
 			logger.error("Erreur lors de l'accès à la liste", e);
+			List<String> message = new ArrayList<>();
+			model.addAttribute("message", message);
+			model.addAttribute("error", true);
+			message.add("add_computer.error.list_companies");
 		}
 		return "addComputer";
 	}
@@ -69,7 +76,9 @@ public class AddComputerController {
 			@Valid @ModelAttribute("cDTO") ComputerDTO cDTO,
 			BindingResult result, ModelMap model) {
 		boolean isUpdate = false;
-
+		
+		List<String> message = new ArrayList<>();
+		model.addAttribute("message", message);
 		if (update != null) {
 			try {
 				Computer computer = computerService.find(update);
@@ -78,6 +87,7 @@ public class AddComputerController {
 				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
+				message.add(e.getMessage());
 				e.printStackTrace();
 			}
 		}
@@ -85,20 +95,31 @@ public class AddComputerController {
 			if (isUpdate) {
 				try {
 					computerService.update(DaoComputer.createEntity(cDTO));
-					cDTO = new ComputerDTO();
+					message.add("add_computer.success.update");
+					model.addAttribute("error", false);
 				} catch (SQLException e) {
 
 					logger.error("Error when update computer", e);
+					message.add("add_computer.error.update");
+					model.addAttribute("error", true);
 				}
 			} else {
 				try {
 					computerService.create(DaoComputer.createEntity(cDTO));
 					cDTO = new ComputerDTO();
+					message.add("add_computer.success.insert");
+					model.addAttribute("error", false);
 				} catch (SQLException e) {
 
 					logger.error("Error when insert new computer", e);
+					message.add("add_computer.error.insert");
+					model.addAttribute("error", true);
 				}
 			}
+		}
+		else
+		{
+			
 		}
 		model.addAttribute("cDTO", cDTO);
 		try {

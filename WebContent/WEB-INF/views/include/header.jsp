@@ -18,6 +18,6 @@
 		</h1>
 	</header>
 	<section id="internationalization">
-		<a href="dashboard?lang=en"><img src="img/United_Kingdom.png" /></a>&nbsp;
-		<a href="dashboard?lang=fr"><img src="img/France.png" /></a>
+		<a href="?lang=en"><img src="img/United_Kingdom.png" /></a>&nbsp;
+		<a href="?lang=fr"><img src="img/France.png" /></a>
 	</section>

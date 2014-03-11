@@ -5,14 +5,15 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <jsp:include page="include/header.jsp" />
 <section id="main">
-	<c:set var="computer" value="${requestScope['computer']}" />
+	<c:set var="computer" value="${computer}" />
 	<h1>${!empty computer ? 'Update' : 'Add'}Computer</h1>
 	<c:if
-		test="${!empty requestScope['message'] && fn:length(requestScope['message']) != 0}">
+		test="${!empty message && fn:length(message) != 0}">
 		<div
-			class="alert-message ${ requestScope['error'] ? 'error' : 'success'}">
-			<c:forEach var="message" items="${requestScope['message']}">
-				<p>${message}</p>
+			class="alert-message ${ error ? 'error' : 'success'}">
+			<c:forEach var="m" items="${message}">
+				<spring:message
+						code="${m}" text="${m}" />
 			</c:forEach>
 		</div>
 	</c:if>

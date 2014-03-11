@@ -86,10 +86,12 @@ public class DashboardController {
 
 		try {
 			computerService.delete(id);
-			message.add("Computer deleted");
+			model.addAttribute("error", false);
+			message.add("dashboard.success.delete");
 		} catch (SQLException e) {
-			logger.error("Error when delete computer", e);
-			message.add("Error when delete computer");
+			logger.error("Error when delete computer in database", e);
+			message.add("dashboard.error.delete");
+			model.addAttribute("error", true);
 		}
 		model.addAttribute("message", message);
 		doGet(model, 0, null, null);
