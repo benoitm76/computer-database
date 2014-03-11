@@ -5,8 +5,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <jsp:include page="include/header.jsp" />
 <section id="main">
-	<c:set var="computer" value="${computer}" />
-	<h1>${!empty computer ? 'Update' : 'Add'}Computer</h1>
+	<h1><spring:message code="${cDTO.id==0 ? 'add_computer.add_title' : 'add_computer.update_title'}" text="Add/Update title" /></h1>
 	<c:if
 		test="${!empty message && fn:length(message) != 0}">
 		<div
@@ -65,9 +64,8 @@
 			</div>
 		</fieldset>
 		<div class="actions">
-			<spring:message code="add_computer.update" var="update" />
-			<spring:message code="add_computer.add" var="add" />
-			<input type="submit" value="${!empty computer ? update : add}"
+			<spring:message code="${cDTO.id==0 ? 'add_computer.add' : 'add_computer.update'}" text="Add/Update title" var="button_text"/>
+			<input type="submit" value="${button_text}"
 				class="btn primary"> or <a href="dashboard" class="btn"><spring:message code="add_computer.cancel" text="Cancel" /></a>
 		</div>
 	</form:form>
