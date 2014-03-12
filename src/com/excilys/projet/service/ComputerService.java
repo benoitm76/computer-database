@@ -16,7 +16,7 @@ public class ComputerService {
 	@Autowired
 	private DaoComputer daoComputer;
 
-	@Transactional (readOnly=true)
+	@Transactional(readOnly = true)
 	public Computer find(long id) throws SQLException {
 		Computer computer = null;
 
@@ -25,7 +25,7 @@ public class ComputerService {
 		return computer;
 	}
 
-	@Transactional (readOnly=true)
+	@Transactional(readOnly = true)
 	public List<Computer> findAllByCreteria(String search, ComputerOrder order,
 			int startAt, int numberOfRows) throws SQLException {
 
@@ -37,7 +37,7 @@ public class ComputerService {
 		return computers;
 	}
 
-	@Transactional (readOnly=true)
+	@Transactional(readOnly = true)
 	public List<Computer> findAll() throws SQLException {
 		List<Computer> computers = null;
 
@@ -61,7 +61,7 @@ public class ComputerService {
 		daoComputer.delete(id);
 	}
 
-	@Transactional (readOnly=true)
+	@Transactional(readOnly = true)
 	public int count(String search) throws SQLException {
 		return daoComputer.count(search);
 	}

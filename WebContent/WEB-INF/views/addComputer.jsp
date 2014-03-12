@@ -18,7 +18,7 @@
 	</c:if>
 
 	<form:form
-		action="./addComputer${!empty computer ? '?update='.concat(computer.id) : ''}"
+		action="./addComputer${!empty cDTO ? '?update='.concat(cDTO.id) : ''}"
 		method="POST" commandName="cDTO">
 		<form:hidden path="id" />
 		<fieldset>

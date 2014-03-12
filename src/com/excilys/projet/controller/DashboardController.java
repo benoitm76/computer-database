@@ -76,6 +76,10 @@ public class DashboardController {
 		} catch (SQLException e) {
 			logger.error("Erreur lors de l'accès à la liste", e);
 		}
+		
+		if (page > 1) {
+			queryParameters.put("page", page + "");
+		}
 		model.addAttribute("query_parameters", queryParameters);
 		return "dashboard";
 	}

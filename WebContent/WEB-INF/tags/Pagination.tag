@@ -8,7 +8,9 @@
 
 <c:url value="./dashboard" var="variableURL">
 	<c:forEach items="${queryParameters}" var="entry">
-		<c:param name="${entry.key}" value="${entry.value}" />
+		<c:if test="${entry.key!='page'}">
+			<c:param name="${entry.key}" value="${entry.value}" />
+		</c:if>
 	</c:forEach>
 </c:url>
 

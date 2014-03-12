@@ -2,7 +2,9 @@ package com.excilys.projet.controller;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -45,12 +47,14 @@ public class AddComputerController {
 			@RequestParam(required = false) Long update) {
 
 		ComputerDTO cDTO = new ComputerDTO();
+		Map<String, String> queryParameters = new HashMap<>();
 
 		if (update != null) {
 
 			try {
 				Computer c = computerService.find(update);
 				cDTO = DaoComputer.createDTO(c);
+				queryParameters.put("update", update + "");
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -68,6 +72,7 @@ public class AddComputerController {
 			model.addAttribute("error", true);
 			message.add("add_computer.error.list_companies");
 		}
+		model.addAttribute("query_parameters", queryParameters);
 		return "addComputer";
 	}
 
@@ -77,13 +82,16 @@ public class AddComputerController {
 			BindingResult result, ModelMap model) {
 		boolean isUpdate = false;
 		
+		Map<String, String> queryParameters = new HashMap<>();		
 		List<String> message = new ArrayList<>();
+		
 		model.addAttribute("message", message);
 		if (update != null) {
 			try {
 				Computer computer = computerService.find(update);
 				if (computer != null) {
 					isUpdate = true;
+					queryParameters.put("update", update + "");
 				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -122,6 +130,7 @@ public class AddComputerController {
 			
 		}
 		model.addAttribute("cDTO", cDTO);
+		model.addAttribute("query_parameters", queryParameters);
 		try {
 			model.addAttribute("list_companies", companyService.findAll());
 		} catch (SQLException e) {
