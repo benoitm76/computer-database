@@ -18,7 +18,7 @@
 	</c:if>
 
 	<form:form
-		action="./addComputer${!empty cDTO ? '?update='.concat(cDTO.id) : ''}"
+		action="./addComputer${!empty cDTO && cDTO.id!=0 ? '?update='.concat(cDTO.id) : ''}"
 		method="POST" commandName="cDTO">
 		<form:hidden path="id" />
 		<fieldset>
@@ -36,9 +36,9 @@
 				<label for="introduced"><spring:message
 						code="add_computer.intoduced_date" text="Introduced Date" />:</label>
 				<div class="input">
-					<form:input type="date" pattern="yyyy-MM-dd" path="introduced" />
+					<form:input path="introduced" />
 					<span class="help-inline">YYYY-MM-DD</span>
-					<form:errors path="introduced" />
+					<form:errors path="introduced" class="error" />
 				</div>
 			</div>
 			<div class="clearfix">
@@ -47,7 +47,7 @@
 				<div class="input">
 					<form:input type="date" pattern="yyyy-MM-dd" path="discontinued" />
 					<span class="help-inline">YYYY-MM-DD</span>
-					<form:errors path="discontinued" />
+					<form:errors path="discontinued" class="error" />
 				</div>
 			</div>
 			<div class="clearfix">
@@ -59,7 +59,7 @@
 						<form:options items="${list_companies}" itemValue="id"
 							itemLabel="name" />
 					</form:select>
-					<form:errors path="companyId" />
+					<form:errors path="companyId" class="error" />
 				</div>
 			</div>
 		</fieldset>

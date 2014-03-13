@@ -63,7 +63,6 @@ public class DaoComputer extends Dao<Computer> implements DaoCriteria<Computer> 
 			sql += " ORDER BY " + order.getOrderStatement();
 		}
 		sql += " LIMIT :startAt, :numberOfRows";
-
 		return getNamedParameterJdbcTemplate().query(sql, parameters,
 				new ComputerMapper());
 

@@ -49,7 +49,7 @@ public class AddComputerController {
 		ComputerDTO cDTO = new ComputerDTO();
 		Map<String, String> queryParameters = new HashMap<>();
 
-		if (update != null) {
+		if (update != null && update != 0) {
 
 			try {
 				Computer c = computerService.find(update);
@@ -124,10 +124,6 @@ public class AddComputerController {
 					model.addAttribute("error", true);
 				}
 			}
-		}
-		else
-		{
-			
 		}
 		model.addAttribute("cDTO", cDTO);
 		model.addAttribute("query_parameters", queryParameters);
