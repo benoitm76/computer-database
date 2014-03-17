@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import com.excilys.projet.model.dto.ComputerDTO;
+import com.excilys.projet.binding.ComputerDTO;
 
 @Component
 public class ComputerValidator implements Validator {

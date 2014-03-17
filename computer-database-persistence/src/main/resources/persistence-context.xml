@@ -37,5 +37,7 @@
 		<property name="dataSource" ref="aDataSource" />
 	</bean>
 	
-	<tx:annotation-driven transaction-manager="txManager" />
+	<context:component-scan base-package="com.excilys.projet.dao" />	
+	
+	<tx:annotation-driven transaction-manager="txManager" />	
 </beans>

@@ -12,8 +12,13 @@
 	</h1>
 	<p>
 		<spring:message code="error_page.exception_body"
-			text="This exception occured : " />${name} <c:if test="${message!=null}">--> ${message}</c:if>
+			text="This exception occured : " />${name}
+		<c:if test="${message!=null}">--> ${message}</c:if>
 	</p>
+	<c:if test="${stackTrace!=null}">
+		<pre>${stackTrace}</pre>
+
+	</c:if>
 
 </section>
 

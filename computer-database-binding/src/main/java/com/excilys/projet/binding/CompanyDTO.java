@@ -1,4 +1,4 @@
-package com.excilys.projet.model.dto;
+package com.excilys.projet.binding;
 
 public class CompanyDTO {
 

@@ -1,6 +1,5 @@
 package com.excilys.projet.controller;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.excilys.projet.dao.DaoComputer;
+import com.excilys.projet.binding.ComputerDTO;
+import com.excilys.projet.binding.ComputerDTOMapper;
 import com.excilys.projet.model.Computer;
 import com.excilys.projet.model.ComputerOrder;
-import com.excilys.projet.model.dto.ComputerDTO;
 import com.excilys.projet.service.ComputerService;
 
 @Controller
@@ -27,6 +26,9 @@ public class DashboardController {
 	final Logger logger = LoggerFactory.getLogger(DashboardController.class);
 	@Autowired
 	private ComputerService computerService;
+	
+	@Autowired
+	private ComputerDTOMapper computerDTOMapper;
 
 	@RequestMapping(method = RequestMethod.GET)
 	private String doGet(ModelMap model,
@@ -42,41 +44,35 @@ public class DashboardController {
 			queryParameters.put("order", computerOrder.getUrlParameter());
 		}
 		List<Computer> computers = new ArrayList<>();
-		try {
-			int numberOfResult = 0;
-			if (search == null) {
-				numberOfResult = computerService.count(null);
-				numberOfPage = (numberOfResult / 10) + 1;
-				if (page < 1 || page > numberOfPage) {
-					page = 1;
-				}
-				computers =  computerService
-						.findAllByCreteria(null, computerOrder,
-								(page - 1) * 10, 10);
-			} else {
-				numberOfResult = computerService.count(search);
-				numberOfPage = (numberOfResult / 10) + 1;
-				queryParameters.put("search", search);
-				if (page < 1 || page > numberOfPage) {
-					page = 1;
-				}
-				computers = computerService
-						.findAllByCreteria(search, computerOrder,
-								(page - 1) * 10, 10);
+
+		int numberOfResult = 0;
+		if (search == null) {
+			numberOfResult = computerService.count(null);
+			numberOfPage = (numberOfResult / 10) + 1;
+			if (page < 1 || page > numberOfPage) {
+				page = 1;
 			}
-			model.addAttribute("current_page", page);
-			model.addAttribute("last_page", numberOfPage);
-			model.addAttribute("number_of_result", numberOfResult);
-			List<ComputerDTO> computersDTO = new ArrayList<>();
-			for(Computer c : computers)
-			{
-				computersDTO.add(DaoComputer.createDTO(c));
+			computers = computerService.findAllByCreteria(null, computerOrder,
+					(page - 1) * 10, 10);
+		} else {
+			numberOfResult = computerService.count(search);
+			numberOfPage = (numberOfResult / 10) + 1;
+			queryParameters.put("search", search);
+			if (page < 1 || page > numberOfPage) {
+				page = 1;
 			}
-			model.addAttribute("list_computers", computersDTO);
-		} catch (SQLException e) {
-			logger.error("Erreur lors de l'accès à la liste", e);
+			computers = computerService.findAllByCreteria(search,
+					computerOrder, (page - 1) * 10, 10);
 		}
-		
+		model.addAttribute("current_page", page);
+		model.addAttribute("last_page", numberOfPage);
+		model.addAttribute("number_of_result", numberOfResult);
+		List<ComputerDTO> computersDTO = new ArrayList<>();
+		for (Computer c : computers) {
+			computersDTO.add(computerDTOMapper.createDTO(c));
+		}
+		model.addAttribute("list_computers", computersDTO);
+
 		if (page > 1) {
 			queryParameters.put("page", page + "");
 		}
@@ -88,15 +84,10 @@ public class DashboardController {
 	private void doPost(ModelMap model, @RequestParam long id) {
 		List<String> message = new ArrayList<>();
 
-		try {
-			computerService.delete(id);
-			model.addAttribute("error", false);
-			message.add("dashboard.success.delete");
-		} catch (SQLException e) {
-			logger.error("Error when delete computer in database", e);
-			message.add("dashboard.error.delete");
-			model.addAttribute("error", true);
-		}
+		computerService.delete(id);
+		model.addAttribute("error", false);
+		message.add("dashboard.success.delete");
+
 		model.addAttribute("message", message);
 		doGet(model, 0, null, null);
 	}

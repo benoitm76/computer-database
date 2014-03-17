@@ -1,6 +1,5 @@
 package com.excilys.projet.controller;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,10 +20,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.excilys.projet.binding.ComputerDTO;
+import com.excilys.projet.binding.ComputerDTOMapper;
 import com.excilys.projet.controller.validator.ComputerValidator;
-import com.excilys.projet.dao.DaoComputer;
 import com.excilys.projet.model.Computer;
-import com.excilys.projet.model.dto.ComputerDTO;
 import com.excilys.projet.service.CompanyService;
 import com.excilys.projet.service.ComputerService;
 
@@ -41,6 +40,9 @@ public class AddComputerController {
 
 	@Autowired
 	private ComputerValidator computerValidator;
+	
+	@Autowired
+	private ComputerDTOMapper computerDTOMapper;
 
 	@RequestMapping(method = RequestMethod.GET)
 	private String doGet(ModelMap model,
@@ -50,28 +52,15 @@ public class AddComputerController {
 		Map<String, String> queryParameters = new HashMap<>();
 
 		if (update != null && update != 0) {
-
-			try {
-				Computer c = computerService.find(update);
-				cDTO = DaoComputer.createDTO(c);
-				queryParameters.put("update", update + "");
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
+			Computer c = computerService.find(update);
+			cDTO = computerDTOMapper.createDTO(c);
+			queryParameters.put("update", update + "");
 		}
-		
+
 		model.addAttribute("cDTO", cDTO);
-		try {
-			model.addAttribute("list_companies", companyService.findAll());
-		} catch (SQLException e) {
-			logger.error("Erreur lors de l'accès à la liste", e);
-			List<String> message = new ArrayList<>();
-			model.addAttribute("message", message);
-			model.addAttribute("error", true);
-			message.add("add_computer.error.list_companies");
-		}
+
+		model.addAttribute("list_companies", companyService.findAll());
+
 		model.addAttribute("query_parameters", queryParameters);
 		return "addComputer";
 	}
@@ -81,57 +70,37 @@ public class AddComputerController {
 			@Valid @ModelAttribute("cDTO") ComputerDTO cDTO,
 			BindingResult result, ModelMap model) {
 		boolean isUpdate = false;
-		
-		Map<String, String> queryParameters = new HashMap<>();		
+
+		Map<String, String> queryParameters = new HashMap<>();
 		List<String> message = new ArrayList<>();
-		
+
 		model.addAttribute("message", message);
 		if (update != null) {
-			try {
-				Computer computer = computerService.find(update);
-				if (computer != null) {
-					isUpdate = true;
-					queryParameters.put("update", update + "");
-				}
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				message.add(e.getMessage());
-				e.printStackTrace();
+
+			Computer computer = computerService.find(update);
+			if (computer != null) {
+				isUpdate = true;
+				queryParameters.put("update", update + "");
 			}
+
 		}
 		if (!result.hasErrors()) {
 			if (isUpdate) {
-				try {
-					computerService.update(DaoComputer.createEntity(cDTO));
-					message.add("add_computer.success.update");
-					model.addAttribute("error", false);
-				} catch (SQLException e) {
-
-					logger.error("Error when update computer", e);
-					message.add("add_computer.error.update");
-					model.addAttribute("error", true);
-				}
+				computerService.update(computerDTOMapper.createEntity(cDTO));
+				message.add("add_computer.success.update");
+				model.addAttribute("error", false);
 			} else {
-				try {
-					computerService.create(DaoComputer.createEntity(cDTO));
-					cDTO = new ComputerDTO();
-					message.add("add_computer.success.insert");
-					model.addAttribute("error", false);
-				} catch (SQLException e) {
-
-					logger.error("Error when insert new computer", e);
-					message.add("add_computer.error.insert");
-					model.addAttribute("error", true);
-				}
+				computerService.create(computerDTOMapper.createEntity(cDTO));
+				cDTO = new ComputerDTO();
+				message.add("add_computer.success.insert");
+				model.addAttribute("error", false);
 			}
 		}
 		model.addAttribute("cDTO", cDTO);
 		model.addAttribute("query_parameters", queryParameters);
-		try {
-			model.addAttribute("list_companies", companyService.findAll());
-		} catch (SQLException e) {
-			logger.error("Erreur lors de l'accès à la liste", e);
-		}
+
+		model.addAttribute("list_companies", companyService.findAll());
+
 		return "addComputer";
 		// doGet(model, update);
 	}

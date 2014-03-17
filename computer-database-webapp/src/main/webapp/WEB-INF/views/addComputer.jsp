@@ -5,14 +5,15 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <jsp:include page="include/header.jsp" />
 <section id="main">
-	<h1><spring:message code="${cDTO.id==0 ? 'add_computer.add_title' : 'add_computer.update_title'}" text="Add/Update title" /></h1>
-	<c:if
-		test="${!empty message && fn:length(message) != 0}">
-		<div
-			class="alert-message ${ error ? 'error' : 'success'}">
+	<h1>
+		<spring:message
+			code="${cDTO.id==0 ? 'add_computer.add_title' : 'add_computer.update_title'}"
+			text="Add/Update title" />
+	</h1>
+	<c:if test="${!empty message && fn:length(message) != 0}">
+		<div class="alert-message ${ error ? 'error' : 'success'}">
 			<c:forEach var="m" items="${message}">
-				<spring:message
-						code="${m}" text="${m}" />
+				<spring:message code="${m}" text="${m}" />
 			</c:forEach>
 		</div>
 	</c:if>
@@ -33,11 +34,14 @@
 				</div>
 			</div>
 			<div class="clearfix">
+				<spring:message code="date.pattern" text="yyyy-MM-dd" var="pattern" />
+				<spring:message code="date.pattern_string" text="YYYY-MM-DD"
+					var="pattern_string" />
 				<label for="introduced"><spring:message
 						code="add_computer.intoduced_date" text="Introduced Date" />:</label>
 				<div class="input">
-					<form:input type="date" pattern="yyyy-MM-dd" path="introduced" />
-					<span class="help-inline">YYYY-MM-DD</span>
+					<form:input type="date" pattern="${pattern}" path="introduced" />
+					<span class="help-inline">${pattern_string}</span>
 					<form:errors path="introduced" class="error" />
 				</div>
 			</div>
@@ -45,8 +49,8 @@
 				<label for="discontinued"><spring:message
 						code="add_computer.discontinued_date" text="Discontinued date" />:</label>
 				<div class="input">
-					<form:input type="date" pattern="yyyy-MM-dd" path="discontinued" />
-					<span class="help-inline">YYYY-MM-DD</span>
+					<form:input type="date" pattern="${pattern}" path="discontinued" />
+					<span class="help-inline">${pattern_string}</span>
 					<form:errors path="discontinued" class="error" />
 				</div>
 			</div>
@@ -64,9 +68,12 @@
 			</div>
 		</fieldset>
 		<div class="actions">
-			<spring:message code="${cDTO.id==0 ? 'add_computer.add' : 'add_computer.update'}" text="Add/Update title" var="button_text"/>
-			<input type="submit" value="${button_text}"
-				class="btn primary"> or <a href="dashboard" class="btn"><spring:message code="add_computer.cancel" text="Cancel" /></a>
+			<spring:message
+				code="${cDTO.id==0 ? 'add_computer.add' : 'add_computer.update'}"
+				text="Add/Update title" var="button_text" />
+			<input type="submit" value="${button_text}" class="btn primary">
+			or <a href="dashboard" class="btn"><spring:message
+					code="add_computer.cancel" text="Cancel" /></a>
 		</div>
 	</form:form>
 </section>

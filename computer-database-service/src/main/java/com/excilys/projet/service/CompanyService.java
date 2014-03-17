@@ -1,6 +1,5 @@
 package com.excilys.projet.service;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +14,8 @@ public class CompanyService {
 	@Autowired
 	private DaoCompany daoCompany;
 
-	@Transactional (readOnly=true)
-	public Company find(long id) throws SQLException {
+	@Transactional(readOnly = true)
+	public Company find(long id) {
 		Company company = null;
 
 		company = daoCompany.find(id);
@@ -24,8 +23,8 @@ public class CompanyService {
 		return company;
 	}
 
-	@Transactional (readOnly=true)
-	public List<Company> findAll() throws SQLException {
+	@Transactional(readOnly = true)
+	public List<Company> findAll() {
 		List<Company> companies = null;
 
 		companies = daoCompany.findAll();
@@ -34,17 +33,17 @@ public class CompanyService {
 	}
 
 	@Transactional
-	public void create(Company c) throws SQLException {
+	public void create(Company c) {
 		daoCompany.create(c);
 	}
 
 	@Transactional
-	public void update(Company c) throws SQLException {
+	public void update(Company c) {
 		daoCompany.update(c);
 	}
 
 	@Transactional
-	public void delete(long id) throws SQLException {
+	public void delete(long id) {
 		daoCompany.delete(id);
 	}
 }

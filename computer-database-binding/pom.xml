@@ -9,7 +9,6 @@
 		<version>2.2.0-RELEASE</version>
 	</parent>
 	<artifactId>computer-database-binding</artifactId>
-	<version>2.2.1-RELEASE</version>
 	<name>computer-database-binding</name>
 	<url>http://maven.apache.org</url>
 	<properties>
@@ -17,20 +16,16 @@
 	</properties>
 	<dependencies>
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>3.8.1</version>
-			<scope>test</scope>
-		</dependency>	
+			<groupId>excilys-formation</groupId>
+			<artifactId>computer-database-core</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-			<version>4.0.2.RELEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
-			<version>2.3</version>
 		</dependency>
 	</dependencies>
 </project>
