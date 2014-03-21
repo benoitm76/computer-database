@@ -40,7 +40,7 @@
 				<label for="introduced"><spring:message
 						code="add_computer.intoduced_date" text="Introduced Date" />:</label>
 				<div class="input">
-					<form:input type="date" pattern="${pattern}" path="introduced" />
+					<form:input type="text" path="introduced" />
 					<span class="help-inline">${pattern_string}</span>
 					<form:errors path="introduced" class="error" />
 				</div>
@@ -49,7 +49,7 @@
 				<label for="discontinued"><spring:message
 						code="add_computer.discontinued_date" text="Discontinued date" />:</label>
 				<div class="input">
-					<form:input type="date" pattern="${pattern}" path="discontinued" />
+					<form:input type="text" path="discontinued" />
 					<span class="help-inline">${pattern_string}</span>
 					<form:errors path="discontinued" class="error" />
 				</div>

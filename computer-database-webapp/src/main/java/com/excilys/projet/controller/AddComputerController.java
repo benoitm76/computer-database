@@ -13,8 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.excilys.projet.binding.ComputerDTO;
 import com.excilys.projet.binding.ComputerDTOMapper;
-import com.excilys.projet.controller.validator.ComputerValidator;
 import com.excilys.projet.model.Computer;
 import com.excilys.projet.service.CompanyService;
 import com.excilys.projet.service.ComputerService;
@@ -38,9 +35,6 @@ public class AddComputerController {
 	@Autowired
 	private ComputerService computerService;
 
-	@Autowired
-	private ComputerValidator computerValidator;
-	
 	@Autowired
 	private ComputerDTOMapper computerDTOMapper;
 
@@ -103,10 +97,5 @@ public class AddComputerController {
 
 		return "addComputer";
 		// doGet(model, update);
-	}
-
-	@InitBinder
-	private void binder(WebDataBinder binder) {
-		binder.addValidators(computerValidator);
 	}
 }

@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.excilys.projet.dao.DaoComputer;
 import com.excilys.projet.model.Computer;
 import com.excilys.projet.model.ComputerOrder;
+import com.excilys.projet.model.Page;
 
 @Service
 public class ComputerService {
@@ -25,15 +26,20 @@ public class ComputerService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<Computer> findAllByCreteria(String search, ComputerOrder order,
+	public Page<Computer, ComputerOrder> findAllByCreteria(String search, ComputerOrder order,
 			int startAt, int numberOfRows) {
 
-		List<Computer> computers = null;
+		Page<Computer, ComputerOrder> page = new Page<>();
 
-		computers = daoComputer.findAllByCreteria(search, order, startAt,
-				numberOfRows);
+		int count = daoComputer.count(search);
+		page.setRecordCount(count);
+		page.setCurrentPage((startAt / 10) + 1);
+		page.setTotalPage((count / 10) + 1);
+		page.setOrder(order);
+		page.setItems(daoComputer.findAllByCreteria(search, order, startAt,
+				numberOfRows));
 
-		return computers;
+		return page;
 	}
 
 	@Transactional(readOnly = true)

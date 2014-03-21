@@ -15,8 +15,13 @@
 		<property name="suffix" value=".jsp" />
 	</bean>
 
-	<mvc:annotation-driven />
-	
+	<bean id="validator"
+		class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+		<property name="validationMessageSource" ref="messageSource" />
+	</bean>
+
+	<mvc:annotation-driven validator="validator" />
+
 	<!-- Locale change link trigger -->
 	<mvc:interceptors>
 		<bean id="localeChangeInterceptor"
@@ -24,7 +29,7 @@
 			<property name="paramName" value="lang" />
 		</bean>
 	</mvc:interceptors>
-	
-	<context:component-scan base-package="com.excilys.projet.controller" />	
-	
+
+	<context:component-scan base-package="com.excilys.projet.controller" />
+
 </beans>

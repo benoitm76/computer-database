@@ -18,6 +18,7 @@ import com.excilys.projet.binding.ComputerDTO;
 import com.excilys.projet.binding.ComputerDTOMapper;
 import com.excilys.projet.model.Computer;
 import com.excilys.projet.model.ComputerOrder;
+import com.excilys.projet.model.Page;
 import com.excilys.projet.service.ComputerService;
 
 @Controller
@@ -26,7 +27,7 @@ public class DashboardController {
 	final Logger logger = LoggerFactory.getLogger(DashboardController.class);
 	@Autowired
 	private ComputerService computerService;
-	
+
 	@Autowired
 	private ComputerDTOMapper computerDTOMapper;
 
@@ -40,10 +41,7 @@ public class DashboardController {
 
 		ComputerOrder computerOrder = getOrder(order, model);
 		Map<String, String> queryParameters = new HashMap<>();
-		if (computerOrder != null) {
-			queryParameters.put("order", computerOrder.getUrlParameter());
-		}
-		List<Computer> computers = new ArrayList<>();
+		Page<Computer, ComputerOrder> pageWrapper = null;
 
 		int numberOfResult = 0;
 		if (search == null) {
@@ -52,8 +50,8 @@ public class DashboardController {
 			if (page < 1 || page > numberOfPage) {
 				page = 1;
 			}
-			computers = computerService.findAllByCreteria(null, computerOrder,
-					(page - 1) * 10, 10);
+			pageWrapper = computerService.findAllByCreteria(null,
+					computerOrder, (page - 1) * 10, 10);
 		} else {
 			numberOfResult = computerService.count(search);
 			numberOfPage = (numberOfResult / 10) + 1;
@@ -61,17 +59,12 @@ public class DashboardController {
 			if (page < 1 || page > numberOfPage) {
 				page = 1;
 			}
-			computers = computerService.findAllByCreteria(search,
+			pageWrapper = computerService.findAllByCreteria(search,
 					computerOrder, (page - 1) * 10, 10);
 		}
-		model.addAttribute("current_page", page);
-		model.addAttribute("last_page", numberOfPage);
-		model.addAttribute("number_of_result", numberOfResult);
-		List<ComputerDTO> computersDTO = new ArrayList<>();
-		for (Computer c : computers) {
-			computersDTO.add(computerDTOMapper.createDTO(c));
-		}
-		model.addAttribute("list_computers", computersDTO);
+		Page<ComputerDTO, ComputerOrder> pageDTO = computerDTOMapper
+				.convertPage(pageWrapper);
+		model.addAttribute("page_wrapper", pageDTO);
 
 		if (page > 1) {
 			queryParameters.put("page", page + "");

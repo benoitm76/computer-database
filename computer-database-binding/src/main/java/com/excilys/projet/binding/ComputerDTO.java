@@ -1,11 +1,20 @@
 package com.excilys.projet.binding;
 
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotBlank;
+
+import com.excilys.projet.validator.CheckDate;
 
 public class ComputerDTO {
 
 	private long id;
+	@NotNull
+	@NotBlank
 	private String name;
+	@CheckDate
 	private String introduced;
+	@CheckDate
 	private String discontinued;
 	private long companyId;
 	private String companyName;

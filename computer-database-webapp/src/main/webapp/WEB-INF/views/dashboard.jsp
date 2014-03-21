@@ -8,7 +8,7 @@
 <jsp:include page="include/header.jsp" />
 
 <section id="main">
-	<h1 id="homeTitle">${number_of_result}&nbsp;<spring:message
+	<h1 id="homeTitle">${page_wrapper.recordCount}&nbsp;<spring:message
 			code="dashboard.computers_found" text="Computers found" />
 	</h1>
 	<c:if test="${!empty message && fn:length(message) != 0}">
@@ -28,6 +28,7 @@
 		<a class="btn success" id="add" href="addComputer"><spring:message
 				code="dashboard.add_computer" text="Ajouter un ordinateur" /></a>
 	</div>
+	<c:set var="order" value="${page_wrapper.order}" />
 	<table class="computers zebra-striped">
 		<thead>
 			<tr>
@@ -51,7 +52,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			<c:forEach var="computer" items="${list_computers}">
+			<c:forEach var="computer" items="${page_wrapper.items}">
 				<tr>
 					<td><a href="./addComputer?update=${computer.id}" onclick="">${computer.name}</a></td>
 					<td>${computer.introduced}</td>
@@ -69,7 +70,7 @@
 			</c:forEach>
 		</tbody>
 	</table>
-	<page:pagination lastPage="${last_page}" currentPage="${current_page}"
+	<page:pagination lastPage="${page_wrapper.totalPage}" currentPage="${page_wrapper.currentPage}"
 		queryParameters="${query_parameters}" />
 </section>
 

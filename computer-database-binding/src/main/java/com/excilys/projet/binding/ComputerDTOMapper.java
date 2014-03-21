@@ -1,5 +1,8 @@
 package com.excilys.projet.binding;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +12,8 @@ import org.springframework.stereotype.Component;
 
 import com.excilys.projet.model.Company;
 import com.excilys.projet.model.Computer;
+import com.excilys.projet.model.ComputerOrder;
+import com.excilys.projet.model.Page;
 
 @Component
 public class ComputerDTOMapper {
@@ -44,14 +49,40 @@ public class ComputerDTOMapper {
 			c.setId(cDto.getId());
 			c.setName(cDto.getName());
 			DateTimeFormatter formater = DateTimeFormat
-					.forPattern("yyyy-MM-dd");
-			c.setIntroduced(formater.parseLocalDate(cDto.getIntroduced()));
-			c.setDiscontinued(formater.parseLocalDate(cDto.getIntroduced()));
+					.forPattern(messageSource.getMessage("date.pattern", null,
+							"yyyy-MM-dd", LocaleContextHolder.getLocale()));
+			if (cDto.getIntroduced() != null && !cDto.getIntroduced().isEmpty()) {
+				c.setIntroduced(formater.parseLocalDate(cDto.getIntroduced()));
+			}
+			if (cDto.getDiscontinued() != null
+					&& !cDto.getDiscontinued().isEmpty()) {
+				c.setDiscontinued(formater.parseLocalDate(cDto
+						.getDiscontinued()));
+			}
 			if (cDto.getCompanyId() != 0) {
 				c.setCompany(new Company(cDto.getCompanyId(), cDto
 						.getCompanyName()));
 			}
 		}
 		return c;
+	}
+
+	public Page<ComputerDTO, ComputerOrder> convertPage(
+			Page<Computer, ComputerOrder> pageComputer) {
+		Page<ComputerDTO, ComputerOrder> pageDTO = new Page<>();
+		pageDTO.setCurrentPage(pageComputer.getCurrentPage());
+		pageDTO.setOrder(pageComputer.getOrder());
+		pageDTO.setRecordCount(pageComputer.getRecordCount());
+		pageDTO.setSearch(pageComputer.getSearch());
+		pageDTO.setTotalPage(pageComputer.getTotalPage());
+		if (pageComputer.getItems() != null) {
+			List<ComputerDTO> computersDTO = new ArrayList<>();
+			for (Computer c : pageComputer.getItems()) {
+				computersDTO.add(createDTO(c));
+			}
+			pageDTO.setItems(computersDTO);
+		}
+
+		return pageDTO;
 	}
 }
