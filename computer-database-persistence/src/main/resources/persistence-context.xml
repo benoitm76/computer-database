@@ -8,36 +8,36 @@
    	http://www.springframework.org/schema/context/spring-context-4.0.xsd 
    	http://www.springframework.org/schema/tx 
 	http://www.springframework.org/schema/tx/spring-tx-4.0.xsd ">
-	
+
 	<bean id="aDataSource" class="com.jolbox.bonecp.BoneCPDataSource"
 		destroy-method="close">
 		<property name="driverClass" value="com.mysql.jdbc.Driver" />
-		<property name="jdbcUrl" value="jdbc:mysql://localhost:3306/computer-database-db?zeroDateTimeBehavior=convertToNull" />
+		<property name="jdbcUrl"
+			value="jdbc:mysql://localhost:3306/computer-database-db?zeroDateTimeBehavior=convertToNull" />
 		<property name="username" value="jee-cdb" />
 		<property name="password" value="password" />
-		<property name="idleConnectionTestPeriod" value="60" />
-		<property name="idleMaxAge" value="240" />
+		<property name="idleConnectionTestPeriodInMinutes" value="60" />
+		<property name="idleMaxAgeInMinutes" value="240" />
 		<property name="maxConnectionsPerPartition" value="30" />
 		<property name="minConnectionsPerPartition" value="10" />
 		<property name="partitionCount" value="3" />
 		<property name="acquireIncrement" value="5" />
 		<property name="statementsCacheSize" value="100" />
-		<property name="releaseHelperThreads" value="3" />
 	</bean>
 
-	<bean id="txManager"
-		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+	<bean id="entityManagerFactory"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<!-- Default value for persistenceXmlLocation -->
+		<property name="persistenceXmlLocation" value="classpath:persistence.xml" />
+		<property name="persistenceUnitName" value="persitenceUnit" />
 		<property name="dataSource" ref="aDataSource" />
 	</bean>
-	
-	<bean id="daoCompany" class="com.excilys.projet.dao.DaoCompany">
-		<property name="dataSource" ref="aDataSource" />
+
+	<bean id="txManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
-	<bean id="daoComputer" class="com.excilys.projet.dao.DaoComputer">
-		<property name="dataSource" ref="aDataSource" />
-	</bean>
-	
-	<context:component-scan base-package="com.excilys.projet.dao" />	
-	
-	<tx:annotation-driven transaction-manager="txManager" />	
+
+	<context:component-scan base-package="com.excilys.projet.dao" />
+
+	<tx:annotation-driven transaction-manager="txManager" />
 </beans>

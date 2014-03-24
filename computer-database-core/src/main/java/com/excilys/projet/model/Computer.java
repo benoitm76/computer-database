@@ -1,13 +1,33 @@
 package com.excilys.projet.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Type;
 import org.joda.time.LocalDate;
 
+@Entity
+@Table(name = "computer")
 public class Computer {
+	@Id
+	@GeneratedValue
+	@Column(name = "id", unique = true, nullable = false)
 	private long id;
+	@Column(name = "name")
 	private String name;
+	@Column(name = "introduced")
+	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
 	private LocalDate introduced;
+	@Column(name = "discontinued")
+	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
 	private LocalDate discontinued;
-
+	@ManyToOne
+	@JoinColumn(referencedColumnName = "id")
 	private Company company;
 
 	public Computer() {

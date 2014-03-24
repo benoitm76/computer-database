@@ -36,8 +36,10 @@ public class ComputerDTOMapper {
 			if (c.getDiscontinued() != null) {
 				cDto.setDiscontinued(formater.print(c.getDiscontinued()));
 			}
-			cDto.setCompanyId(c.getCompany().getId());
-			cDto.setCompanyName(c.getCompany().getName());
+			if (c.getCompany() != null) {
+				cDto.setCompanyId(c.getCompany().getId());
+				cDto.setCompanyName(c.getCompany().getName());
+			}
 		}
 		return cDto;
 	}

@@ -2,28 +2,29 @@ package com.excilys.projet.dao;
 
 import java.util.List;
 
-import org.springframework.jdbc.core.JdbcTemplate;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
-import com.excilys.projet.dao.mapper.CompanyMapper;
+import org.springframework.stereotype.Repository;
+
 import com.excilys.projet.model.Company;
 
+@Repository
 public class DaoCompany extends Dao<Company> {
 
-	private JdbcTemplate jdbcTemplate;
+	@PersistenceContext(unitName = "entityManagerFactory")
+	private EntityManager entityManager;
 
 	public Company find(long id) {
-
-		jdbcTemplate = getJdbcTemplate();
-		return jdbcTemplate.queryForObject(
-				"SELECT id, name FROM company WHERE id = ?",
-				new Object[] { id }, new CompanyMapper());
+		return (Company) entityManager.find(Company.class, new Long(id));
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<Company> findAll() {
 
-		jdbcTemplate = getJdbcTemplate();
-		return jdbcTemplate.query("SELECT id, name FROM company ORDER BY name",
-				new CompanyMapper());
+		Query query = entityManager.createQuery("from Company");
+		return query.getResultList();
 	}
 
 	@Override

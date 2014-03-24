@@ -7,8 +7,8 @@ public enum ComputerOrder {
 			"computer.introduced DESC", "orderByIntroducedDateDesc"), ORDER_BY_DISCONTINUED_DATE_ASC(
 			"computer.discontinued ASC", "orderByDiscontinuedDateAsc"), ORDER_BY_DISCONTINUED_DATE_DESC(
 			"computer.discontinued DESC", "orderByDiscontinuedDateDesc"), ORDER_BY_COMPANY_NAME_ASC(
-			"company.name ASC", "orderByCompanyNameAsc"), ORDER_BY_COMPANY_NAME_DESC(
-			"company.name DESC", "orderByCompanyNameDesc");
+			"company.name ASC NULLS LAST", "orderByCompanyNameAsc"), ORDER_BY_COMPANY_NAME_DESC(
+			"company.name DESC NULLS FIRST", "orderByCompanyNameDesc");
 
 	private final String orderStatement;
 	private final String urlParameter;

@@ -65,6 +65,10 @@ public class DashboardController {
 		Page<ComputerDTO, ComputerOrder> pageDTO = computerDTOMapper
 				.convertPage(pageWrapper);
 		model.addAttribute("page_wrapper", pageDTO);
+		
+		if (computerOrder != null) {
+			queryParameters.put("order", computerOrder.getUrlParameter());
+		}
 
 		if (page > 1) {
 			queryParameters.put("page", page + "");
