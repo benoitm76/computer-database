@@ -69,6 +69,10 @@ public class DashboardController {
 		if (computerOrder != null) {
 			queryParameters.put("order", computerOrder.getUrlParameter());
 		}
+		
+		if (search != null) {
+			queryParameters.put("search", search);
+		}
 
 		if (page > 1) {
 			queryParameters.put("page", page + "");

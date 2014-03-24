@@ -4,17 +4,14 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.JoinType;
-import javax.persistence.criteria.Root;
 
 import org.springframework.stereotype.Repository;
 
-import com.excilys.projet.model.Company;
 import com.excilys.projet.model.Computer;
 import com.excilys.projet.model.ComputerOrder;
+import com.excilys.projet.model.QCompany;
+import com.excilys.projet.model.QComputer;
+import com.mysema.query.jpa.impl.JPAQuery;
 
 @Repository
 public class DaoComputer extends Dao<Computer> implements DaoCriteria<Computer> {
@@ -33,86 +30,69 @@ public class DaoComputer extends Dao<Computer> implements DaoCriteria<Computer> 
 
 	public List<Computer> findAllByCreteria(String search, ComputerOrder order,
 			int startAt, int numberOfRows) {
-
-		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<Computer> cQuery = builder.createQuery(Computer.class);
-		Root<Computer> computerRoot = cQuery.from(Computer.class);
-		cQuery.select(computerRoot);
+		QComputer computer = QComputer.computer;
+		QCompany company = QCompany.company;
+		JPAQuery query = new JPAQuery(entityManager);
+		query.from(computer).leftJoin(computer.company, company);
 		StringBuilder querySearch = new StringBuilder("%").append(search)
 				.append("%");
-		Join<Computer, Company> company = computerRoot.join("company",
-				JoinType.LEFT);
-
 		if (search != null) {
-			cQuery.where(builder.or(builder.like(
-					company.get("name").as(String.class),
-					querySearch.toString()), builder.like(
-					computerRoot.get("name").as(String.class),
-					querySearch.toString())));
+			query.where(computer.name.like(querySearch.toString()).or(
+					company.name.like(querySearch.toString())));
 		}
 		if (order != null) {
 			switch (order) {
 			case ORDER_BY_NAME_ASC:
-				cQuery.orderBy(builder.asc(computerRoot.get("name")));
+				query.orderBy(computer.name.asc());
 				break;
 			case ORDER_BY_NAME_DESC:
-				cQuery.orderBy(builder.desc(computerRoot.get("name")));
+				query.orderBy(computer.name.desc());
 				break;
 			case ORDER_BY_INTRODUCED_DATE_ASC:
-				cQuery.orderBy(builder.asc(computerRoot.get("introduced")));
+				query.orderBy(computer.introduced.asc());
 				break;
 			case ORDER_BY_INTRODUCED_DATE_DESC:
-				cQuery.orderBy(builder.desc(computerRoot.get("introduced")));
+				query.orderBy(computer.introduced.desc());
 				break;
 			case ORDER_BY_DISCONTINUED_DATE_ASC:
-				cQuery.orderBy(builder.asc(computerRoot.get("discontinued")));
+				query.orderBy(computer.discontinued.asc());
 				break;
 			case ORDER_BY_DISCONTINUED_DATE_DESC:
-				cQuery.orderBy(builder.desc(computerRoot.get("discontinued")));
+				query.orderBy(computer.discontinued.desc());
 				break;
 			case ORDER_BY_COMPANY_NAME_ASC:
-				cQuery.orderBy(builder.asc(company.get("name")));
+				query.orderBy(computer.company.name.asc());
 				break;
 			case ORDER_BY_COMPANY_NAME_DESC:
-				cQuery.orderBy(builder.desc(company.get("name")));
+				query.orderBy(computer.company.name.desc());
 				break;
 			}
 		}
-		return entityManager.createQuery(cQuery).setFirstResult(startAt)
-				.setMaxResults(numberOfRows).getResultList();
+		return query.limit(numberOfRows).offset(startAt).list(computer);
 
 	}
 
 	public List<Computer> findAll() {
-		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<Computer> cQuery = builder.createQuery(Computer.class);
-		Root<Computer> computerRoot = cQuery.from(Computer.class);
-		cQuery.select(computerRoot);
-
-		return entityManager.createQuery(cQuery).getResultList();
+		QComputer computer = QComputer.computer;
+		JPAQuery query = new JPAQuery(entityManager);
+		return query.from(computer).list(computer);
 
 	}
 
 	public int count(String search) {
 
-		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<Long> cQuery = builder.createQuery(Long.class);
-		Root<Computer> computerRoot = cQuery.from(Computer.class);
-		cQuery.select(builder.count(computerRoot));
+		QComputer computer = QComputer.computer;
+		QCompany company = QCompany.company;
+		JPAQuery query = new JPAQuery(entityManager);
+		query.from(computer).leftJoin(computer.company, company);
 		StringBuilder querySearch = new StringBuilder("%").append(search)
 				.append("%");
-		Join<Computer, Company> company = computerRoot.join("company",
-				JoinType.LEFT);
-
 		if (search != null) {
-			cQuery.where(builder.or(builder.like(
-					company.get("name").as(String.class),
-					querySearch.toString()), builder.like(
-					computerRoot.get("name").as(String.class),
-					querySearch.toString())));
+			query.where(computer.name.like(querySearch.toString()).or(
+					company.name.like(querySearch.toString())));
 		}
 
-		return (int) (long) entityManager.createQuery(cQuery).getSingleResult();
+		return (int) query.count();
 	}
 
 	public void update(Computer c) {

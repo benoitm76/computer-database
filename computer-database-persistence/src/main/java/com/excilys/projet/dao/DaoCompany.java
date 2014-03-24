@@ -4,13 +4,12 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 
 import org.springframework.stereotype.Repository;
 
 import com.excilys.projet.model.Company;
+import com.excilys.projet.model.QCompany;
+import com.mysema.query.jpa.impl.JPAQuery;
 
 @Repository
 public class DaoCompany extends Dao<Company> {
@@ -24,11 +23,10 @@ public class DaoCompany extends Dao<Company> {
 
 	public List<Company> findAll() {
 
-		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<Company> cQuery = builder.createQuery(Company.class);
-		Root<Company> computerRoot = cQuery.from(Company.class);
-		cQuery.select(computerRoot);
-		return entityManager.createQuery(cQuery).getResultList();
+		QCompany company = QCompany.company;
+		JPAQuery query = new JPAQuery(entityManager);
+		return query.from(company).list(company);
+
 	}
 
 	@Override
