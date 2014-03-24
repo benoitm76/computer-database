@@ -4,10 +4,15 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Root;
 
 import org.springframework.stereotype.Repository;
 
+import com.excilys.projet.model.Company;
 import com.excilys.projet.model.Computer;
 import com.excilys.projet.model.ComputerOrder;
 
@@ -26,50 +31,88 @@ public class DaoComputer extends Dao<Computer> implements DaoCriteria<Computer> 
 
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<Computer> findAllByCreteria(String search, ComputerOrder order,
 			int startAt, int numberOfRows) {
-		StringBuilder hql = new StringBuilder(
-				"SELECT computer FROM Computer as computer LEFT JOIN computer.company company");
-		if (search != null) {
-			hql.append(" where computer.name LIKE :search OR company.name LIKE :search");
-		}
-		if (order != null) {
-			hql.append(" ORDER BY " + order.getOrderStatement());
-		}
-		Query query = entityManager.createQuery(hql.toString());
+
+		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Computer> cQuery = builder.createQuery(Computer.class);
+		Root<Computer> computerRoot = cQuery.from(Computer.class);
+		cQuery.select(computerRoot);
 		StringBuilder querySearch = new StringBuilder("%").append(search)
 				.append("%");
+		Join<Computer, Company> company = computerRoot.join("company",
+				JoinType.LEFT);
+
 		if (search != null) {
-			query.setParameter("search", querySearch.toString());
+			cQuery.where(builder.or(builder.like(
+					company.get("name").as(String.class),
+					querySearch.toString()), builder.like(
+					computerRoot.get("name").as(String.class),
+					querySearch.toString())));
 		}
-		query.setFirstResult(startAt);
-		query.setMaxResults(numberOfRows);
-		return query.getResultList();
+		if (order != null) {
+			switch (order) {
+			case ORDER_BY_NAME_ASC:
+				cQuery.orderBy(builder.asc(computerRoot.get("name")));
+				break;
+			case ORDER_BY_NAME_DESC:
+				cQuery.orderBy(builder.desc(computerRoot.get("name")));
+				break;
+			case ORDER_BY_INTRODUCED_DATE_ASC:
+				cQuery.orderBy(builder.asc(computerRoot.get("introduced")));
+				break;
+			case ORDER_BY_INTRODUCED_DATE_DESC:
+				cQuery.orderBy(builder.desc(computerRoot.get("introduced")));
+				break;
+			case ORDER_BY_DISCONTINUED_DATE_ASC:
+				cQuery.orderBy(builder.asc(computerRoot.get("discontinued")));
+				break;
+			case ORDER_BY_DISCONTINUED_DATE_DESC:
+				cQuery.orderBy(builder.desc(computerRoot.get("discontinued")));
+				break;
+			case ORDER_BY_COMPANY_NAME_ASC:
+				cQuery.orderBy(builder.asc(company.get("name")));
+				break;
+			case ORDER_BY_COMPANY_NAME_DESC:
+				cQuery.orderBy(builder.desc(company.get("name")));
+				break;
+			}
+		}
+		return entityManager.createQuery(cQuery).setFirstResult(startAt)
+				.setMaxResults(numberOfRows).getResultList();
 
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<Computer> findAll() {
-		Query query = entityManager.createQuery("from Computer as Computer");
-		return query.getResultList();
+		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Computer> cQuery = builder.createQuery(Computer.class);
+		Root<Computer> computerRoot = cQuery.from(Computer.class);
+		cQuery.select(computerRoot);
+
+		return entityManager.createQuery(cQuery).getResultList();
 
 	}
 
 	public int count(String search) {
-		StringBuilder hql = new StringBuilder(
-				"SELECT COUNT(computer.id) FROM Computer as computer LEFT JOIN computer.company company");
+
+		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Long> cQuery = builder.createQuery(Long.class);
+		Root<Computer> computerRoot = cQuery.from(Computer.class);
+		cQuery.select(builder.count(computerRoot));
 		StringBuilder querySearch = new StringBuilder("%").append(search)
 				.append("%");
-		if (search != null) {
-			hql.append(" where computer.name LIKE :search OR company.name LIKE :search");
-		}
-		Query query = entityManager.createQuery(hql.toString());
+		Join<Computer, Company> company = computerRoot.join("company",
+				JoinType.LEFT);
 
 		if (search != null) {
-			query.setParameter("search", querySearch.toString());
+			cQuery.where(builder.or(builder.like(
+					company.get("name").as(String.class),
+					querySearch.toString()), builder.like(
+					computerRoot.get("name").as(String.class),
+					querySearch.toString())));
 		}
-		return (int) (long) query.getResultList().get(0);
+
+		return (int) (long) entityManager.createQuery(cQuery).getSingleResult();
 	}
 
 	public void update(Computer c) {

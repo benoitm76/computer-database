@@ -26,15 +26,16 @@ public class ComputerService {
 	}
 
 	@Transactional(readOnly = true)
-	public Page<Computer, ComputerOrder> findAllByCreteria(String search, ComputerOrder order,
-			int startAt, int numberOfRows) {
+	public Page<Computer, ComputerOrder> findAllByCreteria(String search,
+			ComputerOrder order, int startAt, int numberOfRows) {
 
 		Page<Computer, ComputerOrder> page = new Page<>();
 
 		int count = daoComputer.count(search);
+
 		page.setRecordCount(count);
 		page.setCurrentPage((startAt / 10) + 1);
-		page.setTotalPage((count / 10) + 1);
+		page.setTotalPage(((count - 1) / 10) + 1);
 		page.setOrder(order);
 		page.setItems(daoComputer.findAllByCreteria(search, order, startAt,
 				numberOfRows));

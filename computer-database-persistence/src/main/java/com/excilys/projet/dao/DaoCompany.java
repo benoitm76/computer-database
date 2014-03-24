@@ -4,7 +4,9 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 import org.springframework.stereotype.Repository;
 
@@ -20,11 +22,13 @@ public class DaoCompany extends Dao<Company> {
 		return (Company) entityManager.find(Company.class, new Long(id));
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<Company> findAll() {
 
-		Query query = entityManager.createQuery("from Company");
-		return query.getResultList();
+		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Company> cQuery = builder.createQuery(Company.class);
+		Root<Company> computerRoot = cQuery.from(Company.class);
+		cQuery.select(computerRoot);
+		return entityManager.createQuery(cQuery).getResultList();
 	}
 
 	@Override
