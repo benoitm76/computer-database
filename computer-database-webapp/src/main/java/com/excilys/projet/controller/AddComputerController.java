@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.excilys.projet.binding.ComputerDTO;
 import com.excilys.projet.binding.ComputerDTOMapper;
-import com.excilys.projet.model.Computer;
+import com.excilys.projet.domain.Computer;
 import com.excilys.projet.service.CompanyService;
 import com.excilys.projet.service.ComputerService;
 

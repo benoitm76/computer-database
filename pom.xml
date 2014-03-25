@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>excilys-formation</groupId>
 	<artifactId>computer-database</artifactId>
-	<version>3.2.0-RELEASE</version>
+	<version>3.4.0-RELEASE</version>
 	<packaging>pom</packaging>
 	<name>Computer Database</name>
 	<properties>
@@ -15,7 +15,9 @@
 		<spring-webmvc.version>4.0.2.RELEASE</spring-webmvc.version>
 		<spring-jdbc.version>4.0.2.RELEASE</spring-jdbc.version>
 		<spring-orm.version>4.0.2.RELEASE</spring-orm.version>
+		<spring-data-jpa.version>1.5.1.RELEASE</spring-data-jpa.version>
 		<joda-time.version>2.3</joda-time.version>
+		<joda-time-jsptags.version>1.1.1</joda-time-jsptags.version>
 		<validation-api.version>1.1.0.Final</validation-api.version>
 		<junit.version>3.8.1</junit.version>
 		<hibernate-validator.version>5.0.1.Final</hibernate-validator.version>
@@ -89,6 +91,11 @@
 				<version>${spring-orm.version}</version>
 			</dependency>
 			<dependency>
+				<groupId>org.springframework.data</groupId>
+				<artifactId>spring-data-jpa</artifactId>
+				<version>${spring-data-jpa.version}</version>
+			</dependency>
+			<dependency>
 				<groupId>javax.validation</groupId>
 				<artifactId>validation-api</artifactId>
 				<version>${validation-api.version}</version>
@@ -97,6 +104,11 @@
 				<groupId>joda-time</groupId>
 				<artifactId>joda-time</artifactId>
 				<version>${joda-time.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>joda-time</groupId>
+				<artifactId>joda-time-jsptags</artifactId>
+				<version>${joda-time-jsptags.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.jadira.usertype</groupId>
@@ -130,17 +142,6 @@
 				<artifactId>hibernate-entitymanager</artifactId>
 				<version>${hibernate.version}</version>
 			</dependency>
-			<dependency>
-				<groupId>com.mysema.querydsl</groupId>
-				<artifactId>querydsl-apt</artifactId>
-				<version>${querydsl.version}</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>com.mysema.querydsl</groupId>
-				<artifactId>querydsl-jpa</artifactId>
-				<version>${querydsl.version}</version>
-			</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<build>
@@ -153,22 +154,6 @@
 					<source>1.7</source>
 					<target>1.7</target>
 				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>com.mysema.maven</groupId>
-				<artifactId>apt-maven-plugin</artifactId>
-				<version>1.0.9</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>process</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>target/generated-sources/java</outputDirectory>
-							<processor>com.mysema.query.apt.jpa.JPAAnnotationProcessor</processor>
-						</configuration>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 	</build>

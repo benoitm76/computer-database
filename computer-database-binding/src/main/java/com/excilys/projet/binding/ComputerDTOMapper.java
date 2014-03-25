@@ -1,25 +1,19 @@
 package com.excilys.projet.binding;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.MessageSourceAware;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Component;
 
-import com.excilys.projet.model.Company;
-import com.excilys.projet.model.Computer;
-import com.excilys.projet.model.ComputerOrder;
-import com.excilys.projet.model.Page;
+import com.excilys.projet.domain.Company;
+import com.excilys.projet.domain.Computer;
 
 @Component
-public class ComputerDTOMapper {
+public class ComputerDTOMapper implements MessageSourceAware  {
 
-	@Autowired
-	private ResourceBundleMessageSource messageSource;
+	private MessageSource messageSource;
 
 	public ComputerDTO createDTO(Computer c) {
 		ComputerDTO cDto = null;
@@ -69,22 +63,8 @@ public class ComputerDTOMapper {
 		return c;
 	}
 
-	public Page<ComputerDTO, ComputerOrder> convertPage(
-			Page<Computer, ComputerOrder> pageComputer) {
-		Page<ComputerDTO, ComputerOrder> pageDTO = new Page<>();
-		pageDTO.setCurrentPage(pageComputer.getCurrentPage());
-		pageDTO.setOrder(pageComputer.getOrder());
-		pageDTO.setRecordCount(pageComputer.getRecordCount());
-		pageDTO.setSearch(pageComputer.getSearch());
-		pageDTO.setTotalPage(pageComputer.getTotalPage());
-		if (pageComputer.getItems() != null) {
-			List<ComputerDTO> computersDTO = new ArrayList<>();
-			for (Computer c : pageComputer.getItems()) {
-				computersDTO.add(createDTO(c));
-			}
-			pageDTO.setItems(computersDTO);
-		}
-
-		return pageDTO;
+	@Override
+	public void setMessageSource(MessageSource messageSource) {
+		this.messageSource = messageSource;		
 	}
 }

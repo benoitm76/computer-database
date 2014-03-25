@@ -4,8 +4,8 @@
 	version="2.0">
 	<persistence-unit name="persitenceUnit">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
-		<class>com.excilys.projet.model.Company</class>
-		<class>com.excilys.projet.model.Computer</class>
+		<class>com.excilys.projet.domain.Company</class>
+		<class>com.excilys.projet.domain.Computer</class>
 		<properties>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLInnoDBDialect" />
 			<property name="hibernate.show_sql" value="true" />

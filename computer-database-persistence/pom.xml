@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>excilys-formation</groupId>
 		<artifactId>computer-database</artifactId>
-		<version>3.2.0-RELEASE</version>
+		<version>3.4.0-RELEASE</version>
 	</parent>
 	<artifactId>computer-database-persistence</artifactId>
 	<name>computer-database-persistence</name>
@@ -40,6 +40,10 @@
 			<artifactId>spring-jdbc</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-jpa</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
 		</dependency>
@@ -50,15 +54,6 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.mysema.querydsl</groupId>
-			<artifactId>querydsl-jpa</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.mysema.querydsl</groupId>
-			<artifactId>querydsl-apt</artifactId>
-			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 </project>

@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib uri="tools" prefix="t"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -21,23 +22,12 @@
 	</header>
 
 	<section id="internationalization">
-
-		<c:url value="" var="url_en">
-			<c:forEach items="${query_parameters}" var="entry">
-				<c:if test="${entry.key!='lang'}">
-					<c:param name="${entry.key}" value="${entry.value}" />
-				</c:if>
-			</c:forEach>
-			<c:param name="lang" value="en" />
-		</c:url>
-		<c:url value="" var="url_fr">
-			<c:forEach items="${query_parameters}" var="entry">
-				<c:if test="${entry.key!='lang'}">
-					<c:param name="${entry.key}" value="${entry.value}" />
-				</c:if>
-			</c:forEach>
-			<c:param name="lang" value="fr" />
-		</c:url>
-		<a href="${url_en}"><img src="img/United_Kingdom.png" /></a>&nbsp; <a
-			href="${url_fr}"><img src="img/France.png" /></a>
+		<t:link url="" curPage="${page.number + 1}" search="${search}"
+			order="${order }" dir="${dir}" lang="en">
+			<img src="img/United_Kingdom.png" />
+		</t:link>
+		<t:link url="" curPage="${page.number + 1}" search="${search}"
+			order="${order }" dir="${dir}" lang="fr">
+			<img src="img/France.png" />
+		</t:link>
 	</section>

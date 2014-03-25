@@ -20,22 +20,16 @@ public class CheckDateConstraintValidator implements
 
 	@Override
 	public boolean isValid(String dateField, ConstraintValidatorContext cxt) {
-		System.out.println(messageSource.getMessage("date.regex", null,
-				"yyyy-MM-dd", LocaleContextHolder.getLocale()));
 		if (dateField != null && !dateField.isEmpty()) {
 			if (dateField.matches(messageSource.getMessage("date.regex", null,
 					"yyyy-MM-dd", LocaleContextHolder.getLocale()))) {
 
-				try {
-					DateTimeFormatter formater = DateTimeFormat
-							.forPattern(messageSource.getMessage(
-									"date.pattern", null, "yyyy-MM-dd",
-									LocaleContextHolder.getLocale()));
-					formater.parseLocalDate(dateField);
-					return true;
-				} catch (IllegalArgumentException e) {
-					return false;
-				}
+				DateTimeFormatter formater = DateTimeFormat
+						.forPattern(messageSource.getMessage("date.pattern",
+								null, "yyyy-MM-dd",
+								LocaleContextHolder.getLocale()));
+				formater.parseLocalDate(dateField);
+				return true;
 
 			} else {
 				return false;
@@ -49,7 +43,6 @@ public class CheckDateConstraintValidator implements
 	@Override
 	public void setMessageSource(MessageSource messageSource) {
 		this.messageSource = messageSource;
-
 	}
 
 }

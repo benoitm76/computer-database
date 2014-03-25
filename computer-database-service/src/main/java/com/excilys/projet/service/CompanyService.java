@@ -4,46 +4,33 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import com.excilys.projet.dao.DaoCompany;
-import com.excilys.projet.model.Company;
+import com.excilys.projet.domain.Company;
+import com.excilys.projet.repository.CompanyRepository;
 
 @Service
 public class CompanyService {
+
 	@Autowired
-	private DaoCompany daoCompany;
+	private CompanyRepository companyRepository;
 
-	@Transactional(readOnly = true)
 	public Company find(long id) {
-		Company company = null;
-
-		company = daoCompany.find(id);
-
-		return company;
+		return companyRepository.findOne(id);
 	}
 
-	@Transactional(readOnly = true)
 	public List<Company> findAll() {
-		List<Company> companies = null;
-
-		companies = daoCompany.findAll();
-
-		return companies;
+		return companyRepository.findAll();
 	}
 
-	@Transactional
 	public void create(Company c) {
-		daoCompany.create(c);
+		companyRepository.save(c);
 	}
 
-	@Transactional
 	public void update(Company c) {
-		daoCompany.update(c);
+		companyRepository.save(c);
 	}
 
-	@Transactional
 	public void delete(long id) {
-		daoCompany.delete(id);
+		companyRepository.delete(id);
 	}
 }
