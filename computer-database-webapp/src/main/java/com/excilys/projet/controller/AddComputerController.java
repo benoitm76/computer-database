@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.excilys.projet.binding.ComputerDTO;
-import com.excilys.projet.binding.ComputerDTOMapper;
 import com.excilys.projet.domain.Computer;
+import com.excilys.projet.dto.ComputerDTO;
+import com.excilys.projet.mapper.ComputerDTOMapper;
 import com.excilys.projet.service.CompanyService;
 import com.excilys.projet.service.ComputerService;
 

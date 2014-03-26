@@ -1,4 +1,4 @@
-package com.excilys.projet.binding;
+package com.excilys.projet.mapper;
 
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.excilys.projet.domain.Company;
 import com.excilys.projet.domain.Computer;
+import com.excilys.projet.dto.ComputerDTO;
 
 @Component
 public class ComputerDTOMapper implements MessageSourceAware  {

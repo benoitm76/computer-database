@@ -1,6 +1,7 @@
-package com.excilys.projet.binding;
+package com.excilys.projet.mapper;
 
 import com.excilys.projet.domain.Company;
+import com.excilys.projet.dto.CompanyDTO;
 
 public class CompanyDTOMapper {
 

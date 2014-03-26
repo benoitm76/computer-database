@@ -1,4 +1,4 @@
-package com.excilys.projet.binding;
+package com.excilys.projet.dto;
 
 import javax.validation.constraints.NotNull;
 
