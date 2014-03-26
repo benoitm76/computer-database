@@ -1,9 +1,7 @@
 package com.excilys.projet.controller;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -43,19 +41,16 @@ public class AddComputerController {
 			@RequestParam(required = false) Long update) {
 
 		ComputerDTO cDTO = new ComputerDTO();
-		Map<String, String> queryParameters = new HashMap<>();
 
 		if (update != null && update != 0) {
 			Computer c = computerService.find(update);
 			cDTO = computerDTOMapper.createDTO(c);
-			queryParameters.put("update", update + "");
+			model.addAttribute("update", update + "");
 		}
 
 		model.addAttribute("cDTO", cDTO);
 
 		model.addAttribute("list_companies", companyService.findAll());
-
-		model.addAttribute("query_parameters", queryParameters);
 		return "addComputer";
 	}
 
@@ -65,7 +60,6 @@ public class AddComputerController {
 			BindingResult result, ModelMap model) {
 		boolean isUpdate = false;
 
-		Map<String, String> queryParameters = new HashMap<>();
 		List<String> message = new ArrayList<>();
 
 		model.addAttribute("message", message);
@@ -74,7 +68,7 @@ public class AddComputerController {
 			Computer computer = computerService.find(update);
 			if (computer != null) {
 				isUpdate = true;
-				queryParameters.put("update", update + "");
+				model.addAttribute("update", update + "");
 			}
 
 		}
@@ -91,7 +85,6 @@ public class AddComputerController {
 			}
 		}
 		model.addAttribute("cDTO", cDTO);
-		model.addAttribute("query_parameters", queryParameters);
 
 		model.addAttribute("list_companies", companyService.findAll());
 

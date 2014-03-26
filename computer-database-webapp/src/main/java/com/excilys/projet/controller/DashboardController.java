@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Controller;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.excilys.projet.binding.ComputerDTOMapper;
 import com.excilys.projet.domain.Computer;
 import com.excilys.projet.service.ComputerService;
 
@@ -26,9 +24,6 @@ public class DashboardController {
 	final Logger logger = LoggerFactory.getLogger(DashboardController.class);
 	@Autowired
 	private ComputerService computerService;
-
-	@Autowired
-	private ComputerDTOMapper computerDTOMapper;
 
 	@RequestMapping(method = RequestMethod.GET)
 	private String doGet(ModelMap model, Pageable pageable,
@@ -50,7 +45,7 @@ public class DashboardController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	private String doPost(ModelMap model, @RequestParam long id) {
+	private void doPost(ModelMap model, Pageable pageable, @RequestParam long id) {
 		List<String> message = new ArrayList<>();
 
 		computerService.delete(id);
@@ -59,9 +54,7 @@ public class DashboardController {
 
 		model.addAttribute("message", message);
 
-		Page<Computer> page = computerService.findAll(new PageRequest(0, 10));
-		model.addAttribute("page", page);
-		return "dashboard";
+		doGet(model, pageable, null);
 	}
 
 }

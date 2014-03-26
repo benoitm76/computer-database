@@ -23,11 +23,11 @@
 
 	<section id="internationalization">
 		<t:link url="" curPage="${page.number + 1}" search="${search}"
-			order="${order }" dir="${dir}" lang="en">
+			order="${order }" dir="${dir}" update="${update}" lang="en">
 			<img src="img/United_Kingdom.png" />
 		</t:link>
 		<t:link url="" curPage="${page.number + 1}" search="${search}"
-			order="${order }" dir="${dir}" lang="fr">
+			order="${order }" dir="${dir}" update="${update}" lang="fr">
 			<img src="img/France.png" />
 		</t:link>
 	</section>

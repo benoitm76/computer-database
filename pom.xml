@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>excilys-formation</groupId>
 	<artifactId>computer-database</artifactId>
-	<version>3.4.0-RELEASE</version>
+	<version>3.5.0-RELEASE</version>
 	<packaging>pom</packaging>
 	<name>Computer Database</name>
 	<properties>
@@ -15,6 +15,8 @@
 		<spring-webmvc.version>4.0.2.RELEASE</spring-webmvc.version>
 		<spring-jdbc.version>4.0.2.RELEASE</spring-jdbc.version>
 		<spring-orm.version>4.0.2.RELEASE</spring-orm.version>
+		<spring-security-web.version>3.2.3.RELEASE</spring-security-web.version>
+		<sping-security-config.version>3.2.3.RELEASE</sping-security-config.version>		
 		<spring-data-jpa.version>1.5.1.RELEASE</spring-data-jpa.version>
 		<joda-time.version>2.3</joda-time.version>
 		<joda-time-jsptags.version>1.1.1</joda-time-jsptags.version>
@@ -94,6 +96,16 @@
 				<groupId>org.springframework.data</groupId>
 				<artifactId>spring-data-jpa</artifactId>
 				<version>${spring-data-jpa.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-web</artifactId>
+				<version>${spring-security-web.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-config</artifactId>
+				<version>${sping-security-config.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>javax.validation</groupId>

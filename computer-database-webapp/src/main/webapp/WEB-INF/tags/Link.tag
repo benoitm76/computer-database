@@ -11,6 +11,8 @@
 	required="false"%>
 <%@ attribute name="lang" type="java.lang.String" rtexprvalue="true"
 	required="false"%>
+<%@ attribute name="update" type="java.lang.Integer" rtexprvalue="true"
+	required="false"%>
 
 <c:url value="${url}" var="generateUrl">
 	<c:if test="${not empty search}">
@@ -22,11 +24,14 @@
 	<c:if test="${not empty dir}">
 		<c:param name="page.sort.dir" value="${dir}" />
 	</c:if>
-	<c:if test="${not empty curPage}">
+	<c:if test="${not empty curPage && curPage != 1}">
 		<c:param name="page.page" value="${curPage}" />
 	</c:if>
 	<c:if test="${not empty lang}">
 		<c:param name="lang" value="${lang}" />
+	</c:if>
+	<c:if test="${not empty update && update != 0}">
+		<c:param name="update" value="${update}" />
 	</c:if>
 </c:url>
 
