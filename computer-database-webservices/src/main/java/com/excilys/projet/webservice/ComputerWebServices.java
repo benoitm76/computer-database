@@ -1,31 +1,31 @@
 package com.excilys.projet.webservice;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.jws.WebService;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.excilys.projet.domain.Computer;
-import com.excilys.projet.dto.ComputerDTO;
 import com.excilys.projet.mapper.ComputerDTOMapper;
 import com.excilys.projet.service.ComputerService;
 
-@WebService
+@Component
+@Path("/webservices")
 public class ComputerWebServices {
 
 	@Autowired
-	ComputerService computerService;
+	public ComputerService computerService;
 
 	@Autowired
-	ComputerDTOMapper computerDTOMapper;
+	public ComputerDTOMapper computerDTOMapper;
 
-	public List<ComputerDTO> findAll() {
-		List<ComputerDTO> computers = new ArrayList<>();
-		for (Computer c : computerService.findAll()) {
-			computers.add(computerDTOMapper.createDTO(c));
-		}
-		return computers;
+	@GET
+	@Produces("application/xml")
+	public List<Computer> findAll() {
+		return computerService.findAll();
 	}
 }

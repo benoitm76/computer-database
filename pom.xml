@@ -16,6 +16,7 @@
 		<spring-webmvc.version>4.0.2.RELEASE</spring-webmvc.version>
 		<spring-jdbc.version>4.0.2.RELEASE</spring-jdbc.version>
 		<spring-orm.version>4.0.2.RELEASE</spring-orm.version>
+		<spring-aop.version>4.0.2.RELEASE</spring-aop.version>
 		<spring-web.version>4.0.2.RELEASE</spring-web.version>
 		<spring-security-web.version>3.2.3.RELEASE</spring-security-web.version>
 		<sping-security-config.version>3.2.3.RELEASE</sping-security-config.version>
@@ -31,7 +32,7 @@
 		<hibernate.version>4.3.4.Final</hibernate.version>
 		<usertype.core.version>3.1.0.GA</usertype.core.version>
 		<querydsl.version>3.3.2</querydsl.version>
-		<jaxws-spring.version>1.9</jaxws-spring.version>
+		<jersey-spring.version>1.8</jersey-spring.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -89,6 +90,11 @@
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-jdbc</artifactId>
 				<version>${spring-jdbc.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-aop</artifactId>
+				<version>${spring-aop.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
@@ -168,9 +174,9 @@
 				<version>${hibernate.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>org.jvnet.jax-ws-commons.spring</groupId>
-				<artifactId>jaxws-spring</artifactId>
-				<version>${jaxws-spring.version}</version>
+				<groupId>com.sun.jersey.contribs</groupId>
+				<artifactId>jersey-spring</artifactId>
+				<version>${jersey-spring.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

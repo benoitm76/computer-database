@@ -3,7 +3,6 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="joda" uri="http://www.joda.org/joda/time/tags"%>
-<%@ page import="com.excilys.projet.domain.ComputerOrder"%>
 <%@ taglib uri="tools" prefix="t"%>
 
 <jsp:include page="include/header.jsp" />
