@@ -89,6 +89,5 @@ public class AddComputerController {
 		model.addAttribute("list_companies", companyService.findAll());
 
 		return "addComputer";
-		// doGet(model, update);
 	}
 }
