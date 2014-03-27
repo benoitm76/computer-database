@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Order;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,9 +24,6 @@ public class DashboardController {
 	final Logger logger = LoggerFactory.getLogger(DashboardController.class);
 	@Autowired
 	private ComputerService computerService;
-	
-	@Autowired
-	BCryptPasswordEncoder test;
 
 	@RequestMapping(method = RequestMethod.GET)
 	private String doGet(ModelMap model, Pageable pageable,

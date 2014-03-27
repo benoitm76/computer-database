@@ -10,13 +10,15 @@
 	<properties>
 		<slf4j.version>1.7.6</slf4j.version>
 		<jstl.version>1.2</jstl.version>
+		<spring-core.version>4.0.2.RELEASE</spring-core.version>
 		<spring-beans.version>4.0.2.RELEASE</spring-beans.version>
 		<spring-context.version>4.0.2.RELEASE</spring-context.version>
 		<spring-webmvc.version>4.0.2.RELEASE</spring-webmvc.version>
 		<spring-jdbc.version>4.0.2.RELEASE</spring-jdbc.version>
 		<spring-orm.version>4.0.2.RELEASE</spring-orm.version>
+		<spring-web.version>4.0.2.RELEASE</spring-web.version>
 		<spring-security-web.version>3.2.3.RELEASE</spring-security-web.version>
-		<sping-security-config.version>3.2.3.RELEASE</sping-security-config.version>		
+		<sping-security-config.version>3.2.3.RELEASE</sping-security-config.version>
 		<spring-data-jpa.version>1.5.1.RELEASE</spring-data-jpa.version>
 		<joda-time.version>2.3</joda-time.version>
 		<joda-time-jsptags.version>1.1.1</joda-time-jsptags.version>
@@ -29,6 +31,7 @@
 		<hibernate.version>4.3.4.Final</hibernate.version>
 		<usertype.core.version>3.1.0.GA</usertype.core.version>
 		<querydsl.version>3.3.2</querydsl.version>
+		<jaxws-spring.version>1.9</jaxws-spring.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -69,6 +72,11 @@
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
+				<artifactId>spring-core</artifactId>
+				<version>${spring-core.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
 				<artifactId>spring-beans</artifactId>
 				<version>${spring-beans.version}</version>
 			</dependency>
@@ -91,6 +99,11 @@
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-orm</artifactId>
 				<version>${spring-orm.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-web</artifactId>
+				<version>${spring-web.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.data</groupId>
@@ -154,6 +167,11 @@
 				<artifactId>hibernate-entitymanager</artifactId>
 				<version>${hibernate.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>org.jvnet.jax-ws-commons.spring</groupId>
+				<artifactId>jaxws-spring</artifactId>
+				<version>${jaxws-spring.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<build>
@@ -175,5 +193,6 @@
 		<module>computer-database-core</module>
 		<module>computer-database-persistence</module>
 		<module>computer-database-binding</module>
+		<module>computer-database-webservices</module>
 	</modules>
 </project>
