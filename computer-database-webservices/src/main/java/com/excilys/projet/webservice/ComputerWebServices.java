@@ -4,16 +4,15 @@ import java.util.List;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import com.excilys.projet.domain.Computer;
 import com.excilys.projet.mapper.ComputerDTOMapper;
 import com.excilys.projet.service.ComputerService;
 
-@Component
 @Path("/webservices")
 public class ComputerWebServices {
 
@@ -24,8 +23,16 @@ public class ComputerWebServices {
 	public ComputerDTOMapper computerDTOMapper;
 
 	@GET
-	@Produces("application/xml")
+	@Produces("application/json")
 	public List<Computer> findAll() {
 		return computerService.findAll();
+	}
+	
+	@GET
+	@Path("{id}")
+	@Produces("application/json")
+	public Computer getComputer(@PathParam("id") int id)
+	{
+		return computerService.find(id);
 	}
 }

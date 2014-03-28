@@ -7,20 +7,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.hibernate.annotations.Type;
 import org.joda.time.LocalDate;
 
-import com.excilys.projet.adapter.LocalDateAdapter;
-
 @Entity
 @Table(name = "computer")
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)
 public class Computer {
 	@Id
 	@GeneratedValue
@@ -30,11 +22,9 @@ public class Computer {
 	private String name;
 	@Column(name = "introduced")
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
-	@XmlJavaTypeAdapter(LocalDateAdapter.class)
 	private LocalDate introduced;
 	@Column(name = "discontinued")
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
-	@XmlJavaTypeAdapter(LocalDateAdapter.class)
 	private LocalDate discontinued;
 	@ManyToOne
 	@JoinColumn(referencedColumnName = "id")
