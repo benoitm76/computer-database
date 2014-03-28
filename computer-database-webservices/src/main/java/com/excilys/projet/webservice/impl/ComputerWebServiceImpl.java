@@ -1,20 +1,18 @@
-package com.excilys.projet.webservice;
+package com.excilys.projet.webservice.impl;
 
 import java.util.List;
 
-import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.excilys.projet.domain.Computer;
 import com.excilys.projet.mapper.ComputerDTOMapper;
 import com.excilys.projet.service.ComputerService;
+import com.excilys.projet.webservice.ComputerWebService;
 
 @Path("/webservices")
-public class ComputerWebServices {
+public class ComputerWebServiceImpl implements ComputerWebService{
 
 	@Autowired
 	public ComputerService computerService;
@@ -22,17 +20,11 @@ public class ComputerWebServices {
 	@Autowired
 	public ComputerDTOMapper computerDTOMapper;
 
-	@GET
-	@Produces("application/json")
 	public List<Computer> findAll() {
 		return computerService.findAll();
 	}
-	
-	@GET
-	@Path("{id}")
-	@Produces("application/json")
-	public Computer getComputer(@PathParam("id") int id)
-	{
+
+	public Computer getComputer(int id) {
 		return computerService.find(id);
 	}
 }

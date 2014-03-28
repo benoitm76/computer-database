@@ -19,7 +19,7 @@
 		</jaxrs:providers>
 	</jaxrs:server>
 
-	<bean id="serviceBean" class="com.excilys.projet.webservice.ComputerWebServices" />
+	<bean id="serviceBean" class="com.excilys.projet.webservice.impl.ComputerWebServiceImpl" />
 
 	<import resource="classpath:binding-context.xml" />
 	<import resource="classpath:service-context.xml" />

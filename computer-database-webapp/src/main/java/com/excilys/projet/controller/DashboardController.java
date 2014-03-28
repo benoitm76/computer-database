@@ -7,7 +7,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -22,6 +24,7 @@ import com.excilys.projet.service.ComputerService;
 @RequestMapping("/dashboard")
 public class DashboardController {
 	final Logger logger = LoggerFactory.getLogger(DashboardController.class);
+	
 	@Autowired
 	private ComputerService computerService;
 
@@ -29,12 +32,19 @@ public class DashboardController {
 	private String doGet(ModelMap model, Pageable pageable,
 			@RequestParam(required = false) String search) {
 		Page<Computer> page = null;
+
+		if (pageable.getSort() == null) {
+			pageable = new PageRequest(pageable.getPageNumber(),
+					pageable.getPageSize(), Direction.ASC, "name");
+		}
+		
 		if (search == null) {
 			page = computerService.findAll(pageable);
 		} else {
 			model.addAttribute("search", search);
 			page = computerService.findAllByName(search, pageable);
 		}
+		
 		if (page.getSort() != null) {
 			Order order = page.getSort().iterator().next();
 			model.addAttribute("order", order.getProperty());
@@ -56,5 +66,4 @@ public class DashboardController {
 
 		doGet(model, pageable, null);
 	}
-
 }

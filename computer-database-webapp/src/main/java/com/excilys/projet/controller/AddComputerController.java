@@ -8,6 +8,8 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -49,8 +51,8 @@ public class AddComputerController {
 		}
 
 		model.addAttribute("cDTO", cDTO);
-
-		model.addAttribute("list_companies", companyService.findAll());
+		Sort sort = new Sort(Direction.ASC, "name");
+		model.addAttribute("list_companies", companyService.findAll(sort));
 		return "addComputer";
 	}
 
@@ -85,8 +87,8 @@ public class AddComputerController {
 			}
 		}
 		model.addAttribute("cDTO", cDTO);
-
-		model.addAttribute("list_companies", companyService.findAll());
+		Sort sort = new Sort(Direction.ASC, "name");
+		model.addAttribute("list_companies", companyService.findAll(sort));
 
 		return "addComputer";
 	}

@@ -3,6 +3,7 @@ package com.excilys.projet.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.excilys.projet.domain.Company;
@@ -20,6 +21,10 @@ public class CompanyService {
 
 	public List<Company> findAll() {
 		return companyRepository.findAll();
+	}
+	
+	public List<Company> findAll(Sort sort) {
+		return companyRepository.findAll(sort);
 	}
 
 	public void create(Company c) {
