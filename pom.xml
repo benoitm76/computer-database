@@ -52,7 +52,7 @@
 		<bonecp.version>0.8.0.RELEASE</bonecp.version>
 
 		<!-- Apache CXF -->
-		<cxf-jaxrs.version>2.7.10</cxf-jaxrs.version>
+		<cxf-jaxrs.version>2.7.0</cxf-jaxrs.version>
 		<cxf-jaxrs-jackson.version>1.9.0</cxf-jaxrs-jackson.version>
 
 	</properties>

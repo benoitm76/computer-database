@@ -10,17 +10,18 @@
 	http://cxf.apache.org/jaxrs 
 	http://cxf.apache.org/schemas/jaxrs.xsd">
 
+	<import resource="classpath:META-INF/cxf/cxf.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+
 	<jaxrs:server id="customerService" address="/computer">
 		<jaxrs:serviceBeans>
-			<ref bean="serviceBean" />
+			<bean class="com.excilys.projet.webservice.impl.ComputerWebServiceImpl" />
 		</jaxrs:serviceBeans>
 		<jaxrs:providers>
 			<bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />
 		</jaxrs:providers>
 	</jaxrs:server>
-
-	<bean id="serviceBean" class="com.excilys.projet.webservice.impl.ComputerWebServiceImpl" />
-
+	
 	<import resource="classpath:binding-context.xml" />
 	<import resource="classpath:service-context.xml" />
 
