@@ -15,10 +15,10 @@ import com.excilys.projet.webservice.ComputerWebService;
 public class ComputerWebServiceImpl implements ComputerWebService{
 
 	@Autowired
-	public ComputerService computerService;
+	private ComputerService computerService;
 
 	@Autowired
-	public ComputerDTOMapper computerDTOMapper;
+	private ComputerDTOMapper computerDTOMapper;
 
 	public List<Computer> findAll() {
 		return computerService.findAll();
