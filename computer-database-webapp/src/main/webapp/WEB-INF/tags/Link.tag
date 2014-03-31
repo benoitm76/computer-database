@@ -13,6 +13,10 @@
 	required="false"%>
 <%@ attribute name="update" type="java.lang.Integer" rtexprvalue="true"
 	required="false"%>
+<%@ attribute name="onlyUrl" type="java.lang.Boolean"
+	rtexprvalue="false" required="false"%>
+<%@ tag trimDirectiveWhitespaces="true" %>
+	
 
 <c:url value="${url}" var="generateUrl">
 	<c:if test="${not empty search}">
@@ -35,4 +39,11 @@
 	</c:if>
 </c:url>
 
-<a href="${generateUrl}"><jsp:doBody/></a>
+<c:choose>
+	<c:when test="${not empty onlyUrl && onlyUrl}">
+		${generateUrl}
+	</c:when>
+	<c:otherwise>
+		<a href="${generateUrl}"><jsp:doBody /></a>
+	</c:otherwise>
+</c:choose>

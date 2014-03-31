@@ -62,8 +62,8 @@
 				<th><spring:message code="dashboard.delete" text="Delete" /></th>
 			</tr>
 		</thead>
-		<spring:message code="date.pattern"
-							text="yyyy-MM-dd" var="datePattern" />
+		<spring:message code="date.pattern" text="yyyy-MM-dd"
+			var="datePattern" />
 		<tbody>
 			<c:forEach var="computer" items="${page.content}">
 				<tr>
@@ -74,7 +74,9 @@
 							pattern="${datePattern}" /></td>
 					<td>${computer.company.name}</td>
 					<td>
-						<form class="delete_form" action="./dashboard" method="POST">
+						<form class="delete_form"
+							action="<t:link url='dashboard' curPage='${page.number + 1}' search='${search}' order='order' dir='dir' onlyUrl='true'/>"
+							method="POST">
 							<input type="hidden" name="id" value="${computer.id}" /> <input
 								type="submit" class="btn danger"
 								value="<spring:message code="dashboard.delete" text="Delete" />" />

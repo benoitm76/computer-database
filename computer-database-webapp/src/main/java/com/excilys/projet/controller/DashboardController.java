@@ -24,7 +24,7 @@ import com.excilys.projet.service.ComputerService;
 @RequestMapping("/dashboard")
 public class DashboardController {
 	final Logger logger = LoggerFactory.getLogger(DashboardController.class);
-	
+
 	@Autowired
 	private ComputerService computerService;
 
@@ -37,14 +37,14 @@ public class DashboardController {
 			pageable = new PageRequest(pageable.getPageNumber(),
 					pageable.getPageSize(), Direction.ASC, "name");
 		}
-		
+
 		if (search == null) {
 			page = computerService.findAll(pageable);
 		} else {
 			model.addAttribute("search", search);
 			page = computerService.findAllByName(search, pageable);
 		}
-		
+
 		if (page.getSort() != null) {
 			Order order = page.getSort().iterator().next();
 			model.addAttribute("order", order.getProperty());
@@ -55,7 +55,8 @@ public class DashboardController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	private void doPost(ModelMap model, Pageable pageable, @RequestParam long id) {
+	private void doPost(ModelMap model, Pageable pageable,
+			@RequestParam(required = false) String search, @RequestParam long id) {
 		List<String> message = new ArrayList<>();
 
 		computerService.delete(id);
@@ -64,6 +65,6 @@ public class DashboardController {
 
 		model.addAttribute("message", message);
 
-		doGet(model, pageable, null);
+		doGet(model, pageable, search);
 	}
 }

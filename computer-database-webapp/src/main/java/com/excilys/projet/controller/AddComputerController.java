@@ -70,21 +70,23 @@ public class AddComputerController {
 			Computer computer = computerService.find(update);
 			if (computer != null) {
 				isUpdate = true;
-				model.addAttribute("update", update + "");
+				
 			}
 
 		}
 		if (!result.hasErrors()) {
+			Computer computer = computerDTOMapper.createEntity(cDTO);
 			if (isUpdate) {
-				computerService.update(computerDTOMapper.createEntity(cDTO));
+				computerService.update(computer);
 				message.add("add_computer.success.update");
 				model.addAttribute("error", false);
 			} else {
-				computerService.create(computerDTOMapper.createEntity(cDTO));
-				cDTO = new ComputerDTO();
+				computerService.create(computer);
 				message.add("add_computer.success.insert");
 				model.addAttribute("error", false);
 			}
+			cDTO = computerDTOMapper.createDTO(computer);
+			model.addAttribute("update", computer.getId() + "");
 		}
 		model.addAttribute("cDTO", cDTO);
 		Sort sort = new Sort(Direction.ASC, "name");

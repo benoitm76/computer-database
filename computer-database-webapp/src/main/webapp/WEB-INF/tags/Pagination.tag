@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="tools" prefix="t"%>
 <%@ attribute name="lastPage" required="true" type="java.lang.Integer"
 	rtexprvalue="true"%>
 <%@ attribute name="url" type="java.lang.String" rtexprvalue="true"
@@ -11,7 +12,6 @@
 	required="false"%>
 <%@ attribute name="curPage" type="java.lang.Integer" rtexprvalue="true"
 	required="true"%>
-<%@ taglib uri="tools" prefix="t"%>
 
 <c:set var="currentPage" value="${curPage + 1}" />
 <c:if test="${currentPage > 4}">
