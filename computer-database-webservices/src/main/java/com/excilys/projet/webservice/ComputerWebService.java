@@ -19,4 +19,9 @@ public interface ComputerWebService {
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Computer findComputer(@PathParam("id") int id);
+
+	@GET
+	@Path("find/{name}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Computer> findByName(@PathParam("name") String name);
 }

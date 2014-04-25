@@ -10,8 +10,8 @@ header h1 {
 }
 
 section#main {
-	/*position: relative;*/
-	padding: 5em 2em;
+	margin-top:20px;
+	padding: 2em;
 	border-bottom: 1px solid #ccc;
 	min-height: 600px;
 }
@@ -22,7 +22,11 @@ section#main .topRight {
 	top: 70px;
 }
 
-table.computers em {
+table.computers {
+	margin-top: 15px;
+}
+
+/*table.computers em {
 	color: #aaa;
 }
 
@@ -34,6 +38,15 @@ table.computers .introduced,table.computers .discontinued {
 table.computers .company_name {
 	width: 30%;
 	min-width: 300px;
+}*/
+
+.form-group input.form-control, .form-group select.form-control {
+    width:auto;
+    display: inline;
+}
+
+.form-group .help-block {
+	display: inline;
 }
 
 table.computers .header a {
@@ -83,9 +96,11 @@ table.computers .header a {
 	color: red;
 }
 
-#internationalization {
-	/*position: relative;*/
-	float: right;
-	clear: both;
-	padding: 5em 2em;
+.navbar #list_lang {
+	padding-right: 40px; 
+}
+
+.navbar #list_lang a{
+	padding-left: 5px;
+	padding-right: 5px;
 }

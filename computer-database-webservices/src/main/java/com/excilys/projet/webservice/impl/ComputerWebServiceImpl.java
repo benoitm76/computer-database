@@ -27,4 +27,8 @@ public class ComputerWebServiceImpl implements ComputerWebService{
 	public Computer findComputer(int id) {
 		return computerService.find(id);
 	}
+
+	public List<Computer> findByName(String name) {
+		return computerService.findAllByName(name, null).getContent();
+	}
 }

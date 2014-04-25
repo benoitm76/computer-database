@@ -15,8 +15,10 @@
 	required="false"%>
 <%@ attribute name="onlyUrl" type="java.lang.Boolean"
 	rtexprvalue="false" required="false"%>
-<%@ tag trimDirectiveWhitespaces="true" %>
-	
+<%@ attribute name="attrClass" type="java.lang.String" rtexprvalue="true"
+	required="false"%>
+<%@ tag trimDirectiveWhitespaces="true"%>
+
 
 <c:url value="${url}" var="generateUrl">
 	<c:if test="${not empty search}">
@@ -44,6 +46,6 @@
 		${generateUrl}
 	</c:when>
 	<c:otherwise>
-		<a href="${generateUrl}"><jsp:doBody /></a>
+		<a href="${generateUrl}" ${not empty attrClass ? 'class="'.concat(attrClass).concat('"') : ''}><jsp:doBody /></a>
 	</c:otherwise>
 </c:choose>
